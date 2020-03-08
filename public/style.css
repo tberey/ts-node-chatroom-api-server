@@ -1,0 +1,37 @@
+/* Client Page Styling */
+
+body {
+    display: flex;
+}
+
+button {
+    margin: 2px;
+}
+
+.inputForm {
+    flex: 1;
+    width: 49%;
+    margin-left: 2px;
+    margin-right: 2px;
+    background-color:rgb(106, 215, 223) ;
+    border: 3px solid rgb(19, 0, 128);
+}
+
+.outputForm {
+    flex: 1;
+    width: 49%;
+    margin-left: 2px;
+    margin-right: 2px;
+    background-color:rgb(101, 245, 214) ;
+    border: 3px solid rgb(19, 0, 128);
+}
+
+#message-input {
+    position: sticky;
+    top: 99%;
+}
+
+#update-username {
+    padding-left: 2%;
+    padding-bottom: 1%;
+}

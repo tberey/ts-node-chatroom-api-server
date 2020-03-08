@@ -1,0 +1,44 @@
+<!-- Served Client Page -->
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <!-- Metadata -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ChatRoom</title>
+    <meta name="author" content="Tom B">
+    <meta name="description" content="">
+
+    <!-- Stylesheet and client dependancy CDN remote Script. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+
+  <!-- Main Document Body. -->
+  <body>
+    <div class="outputForm">
+      <section id="chatroom">
+        <section id="feedback"></section>
+      </section>
+    </div>
+
+    <div class="inputForm">
+      <nav id="update-username">
+        <button id="submit-username" type="button">Set Name</button>
+        <input id="username" type="text" />
+      </nav>
+
+      <nav id="message-input">
+        <button id="submit-message" type="button">Send Msg</button>
+        <input style="width:80%;" id="message" type="text" value=""/>
+      </nav>
+    </div>
+
+    <!-- Scripting -->
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+
+</html>
