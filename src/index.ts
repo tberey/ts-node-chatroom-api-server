@@ -13,6 +13,8 @@ NOTES/TODO/BUGS/FIXES:-
 
 4) Concurrent users connected list.
 
+5) Add private chat feature? So it is locked to two people max (force newclient to emit "disconnect"?? when sockets > 2).
+
 -------------------------------------------------------------------------------------------------
 */
 
