@@ -15,6 +15,8 @@ NOTES/TODO/BUGS/FIXES:-
 
 5) Add private chat feature? So it is locked to two people max (force newclient to emit "disconnect"?? when sockets > 2).
 
+BUG: When someone sends a message it clears the input message field for all clients!!
+
 -------------------------------------------------------------------------------------------------
 */
 

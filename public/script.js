@@ -12,6 +12,7 @@ $(() => {
 	let submitUsername = $('#submit-username');
 	let chatroom = $('#chatroom');
     let feedback = $('#feedback');
+    let usrList = $('#users-list');
     
     // Emit change in username signal, to update server socket property.
     submitUsername.click(() => {
@@ -22,12 +23,24 @@ $(() => {
 	sendMessage.click(() => {
 		socket.emit('newMessage', {message : message.val()});
     });
+
+    // Listen for delete user list signal to clear html, in preparation for a new list emitted.
+    socket.on('deleteList', () => {
+        usrList.html('');
+    });
+
+    // Listen for the user list items to be emitted by server on connection, and append to html.
+    socket.on('userListItem', (data) => {
+        usrList.append(`<li>Name: ${data.name}, ID: ${data.uniqueID}</li>`)
+    });
     
+    // Listen the full message list being retuned.
     socket.on('msgSetItem', (data) => {
+
         // Build each message into the page DOM.
 		chatroom.append(
-            `<p class="message"><b>${data.username} says:</b><br><i>${data.message}</i></p>
-            <sup style="font-size:x-small;">Unique ID: <b>${data.uniqueID}</b>; sent <i>${data.datetime}.</i></sup>`
+            `<p class="message"><b>${data.user.name} says:</b><br><i>${data.message}</i></p>
+            <sup style="font-size:x-small;">Unique ID: <b>${data.user.uniqueID}</b>; sent <i>${data.datetime}.</i></sup>`
         );
     });
 
@@ -38,8 +51,8 @@ $(() => {
 
         // Build each message into the page DOM.
 		chatroom.append(
-            `<p class="message"><b>${data.username} says:</b><br><i>${data.message}</i></p>
-            <sup style="font-size:x-small;">Unique ID: <b>${data.uniqueID}</b>; sent <i>${data.datetime}.</i></sup>`
+            `<p class="message"><b>${data.user.name} says:</b><br><i>${data.message}</i></p>
+            <sup style="font-size:x-small;">Unique ID: <b>${data.user.uniqueID}</b>; sent <i>${data.datetime}.</i></sup>`
         );
     });
     
@@ -51,7 +64,7 @@ $(() => {
     //Listen for a user is typing signal, to build into Page DOM if someone is currently typing a message. Set timer to remove element after 1.25 seconds.
     let bool = false;
 	socket.on('typing', (data) => {
-        feedback.html(`<sub><i>${data.username} is typing...</i></sub>`);
+        feedback.html(`<sub><i>${data} is typing...</i></sub>`);
         
         if (!(bool)) {
             bool = true;

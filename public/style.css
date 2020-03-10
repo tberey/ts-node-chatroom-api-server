@@ -34,4 +34,6 @@ button {
 #update-username {
     padding-left: 2%;
     padding-bottom: 1%;
+    position: sticky;
+    top: 99%;
 }
