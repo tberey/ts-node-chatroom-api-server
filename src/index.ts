@@ -5,15 +5,13 @@ NOTES/TODO/BUGS/FIXES:-
 ==================================================================================================
 
 
-1) Add <user> has connected/disconnected message. Currently only shows in terminal/console.
+1) Add <user> has connected/disconnected message. Currently only shows in terminal/console, but show as a message line.
 
-2) Show all prior messages on joining chat.
+2) Show all users who are currently typing, when more than one simultaneously.
 
-3) Show all users who are currently typing, when more than one simultaneously.
+3) Send the information that's logged to console to the chatroom message list/output.
 
-4) Concurrent users connected list.
-
-5) Add private chat feature? So it is locked to two people max (force newclient to emit "disconnect"?? when sockets > 2).
+4) Make messages be a iframe type thing, so they scroll in that small area.
 
 BUG: When someone sends a message it clears the input message field for all clients!!
 

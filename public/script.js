@@ -12,7 +12,7 @@ $(() => {
 	let submitUsername = $('#submit-username');
 	let chatroom = $('#chatroom');
     let feedback = $('#feedback');
-    let usrList = $('#users-list');
+    let usrList = $('#tableStart');
     
     // Emit change in username signal, to update server socket property.
     submitUsername.click(() => {
@@ -31,7 +31,7 @@ $(() => {
 
     // Listen for the user list items to be emitted by server on connection, and append to html.
     socket.on('userListItem', (data) => {
-        usrList.append(`<li>Name: ${data.name}, ID: ${data.uniqueID}</li>`)
+        usrList.append(`<tr><td>${data.name}</td><td>${data.uniqueID}</td></tr>`);
     });
     
     // Listen the full message list being retuned.
@@ -42,6 +42,10 @@ $(() => {
             `<p class="message"><b>${data.user.name} says:</b><br><i>${data.message}</i></p>
             <sup style="font-size:x-small;">Unique ID: <b>${data.user.uniqueID}</b>; sent <i>${data.datetime}.</i></sup>`
         );
+        
+        // Auto-scroll to newest message, at bottom of element.
+        $("#chatroom").animate({scrollTop:$("#chatroom")[0].scrollHeight}, 80);
+        //$('#chatroom').scrollTop($('#chatroom').prop('scrollHeight'));
     });
 
 	// Listen for any new messages being broadcast/emitted.
@@ -54,6 +58,9 @@ $(() => {
             `<p class="message"><b>${data.user.name} says:</b><br><i>${data.message}</i></p>
             <sup style="font-size:x-small;">Unique ID: <b>${data.user.uniqueID}</b>; sent <i>${data.datetime}.</i></sup>`
         );
+        
+        // Set scroll to bottom of appended element on new message.
+        $('#chatroom').scrollTop($('#chatroom').prop('scrollHeight'));
     });
     
     // Bind 'message' DOM Object to the 'keypress' event, to emit the user is typing signal. (I.e. When there's a keypress event on input field, emit the signal).
@@ -68,7 +75,7 @@ $(() => {
         
         if (!(bool)) {
             bool = true;
-            setTimeout(() => {feedback.html(''); bool=false;}, 1250);
+            setTimeout(() => {feedback.html(''); bool=false;}, 1300);
         }
     });
 });
