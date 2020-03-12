@@ -13,7 +13,7 @@
 ***
 
 ### Client Page (Front-End) Homepage: <br>
-#### <b>http://localhost:<Port\></b>
+#### <b>http://localhost:<Port\>/chat</b>
 
 ***
 
