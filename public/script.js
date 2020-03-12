@@ -1,8 +1,10 @@
-// Client Page Scripting
+// Client-Side Public Scripting
 
 $(() => {
-    //Set Socket.io connection to server/api url, (i.e. 'http://localhost:<port>').
-    const socket = io.connect(window.location.href);
+
+    //Set Socket.io connection to server/api url, (i.e. 'http://localhost:<port>/chat'), set the path, and then request all messages that may already exist.
+    let port = (window.location.href).replace(/\D/g,'');
+    const socket = io.connect(`http://localhost:${port}`, {'path': '/chat'});
     socket.emit('allMessages');
 
     // Declare DOM variables.
@@ -21,12 +23,17 @@ $(() => {
 
     // Emit new message signal, to update server of message to broadcast/emit to connected sockets.
 	sendMessage.click(() => {
-		socket.emit('newMessage', {message : message.val()});
+        socket.emit('newMessage', {message : message.val()});
+        message.val('');
     });
 
-    // Listen for delete user list signal to clear html, in preparation for a new list emitted.
-    socket.on('deleteList', () => {
+    // Listen for delete user list signal to clear html, in preparation for a new list emitted. Append received data as a msg to html.
+    socket.on('deleteList', (data) => {
         usrList.html('');
+        if (data) chatroom.append(`<p class="message"><b>Server says:</b><br><i>${data}</i></p>`);
+        
+        // Set scroll to bottom of appended element on new message.
+        $('#chatroom').scrollTop($('#chatroom').prop('scrollHeight'));
     });
 
     // Listen for the user list items to be emitted by server on connection, and append to html.
@@ -50,8 +57,6 @@ $(() => {
 
 	// Listen for any new messages being broadcast/emitted.
 	socket.on('newMessage', (data) => {
-		feedback.html('');
-        message.val('');
 
         // Build each message into the page DOM.
 		chatroom.append(
@@ -68,14 +73,11 @@ $(() => {
         socket.emit('typing');
     });
     
-    //Listen for a user is typing signal, to build into Page DOM if someone is currently typing a message. Set timer to remove element after 1.25 seconds.
+    //Listen for a user typing signal, to build into Page DOM a message relaying who is typing. Set timer to remove element after 2 seconds.
     let bool = false;
 	socket.on('typing', (data) => {
-        feedback.html(`<sub><i>${data} is typing...</i></sub>`);
         
-        if (!(bool)) {
-            bool = true;
-            setTimeout(() => {feedback.html(''); bool=false;}, 1300);
-        }
+        if (feedback.html().indexOf(data) == -1) feedback.append(`<sub><i><li class="typing">${data} is typing...</i></sub></li>`);
+        setTimeout(() => {feedback.html(''); bool=false;}, 2000);
     });
 });
