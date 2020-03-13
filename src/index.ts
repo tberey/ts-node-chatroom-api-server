@@ -16,6 +16,7 @@ NOTES/TODO/BUGS/FIXES:-
 import express from "express";
 import http from "http";
 import SocketIOServer from "socket.io";
+import mySQL from "mysql";
 
 // Import external function.
 import initializeSocketIO from "./socket";
@@ -24,10 +25,21 @@ import initializeSocketIO from "./socket";
 const app = express(); // Initialise express web app framework.
 const server = new http.Server(app); // Initialise a new server object on http.
 const io = SocketIOServer(server, {'path': '/chat'}); // Initialise new instance of socket.io on server.
-const port = process.env.PORT || 8080; // Set server port.
+const port = process.env.PORT || 8000; // Set server port.
+const db = mySQL.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'Chatroom_Users'
+});
+
 
 // Call imported function, passing the io server as argument. The server connects a client via a socket, so another new socket opens for the server to listen for further connections.
 initializeSocketIO(io);
+
+db.connect((err) => {
+    console.log('DB Connected!');
+});
 
 // Set view engine (express page templates engine) to 'ejs' files, to serve client page.
 app.set('view engine', 'ejs');
@@ -42,5 +54,5 @@ app.get('/chat', (req,res) => {
 
 // Start server and listen on port for incoming connections.
 server.listen(port, () => {
-    console.log(`server started at http://localhost:${port}`);
+    console.log(`server started at http://localhost:${port}/chat`);
 });

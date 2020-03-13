@@ -3,7 +3,7 @@
 $(() => {
 
     //Set Socket.io connection to server/api url, (i.e. 'http://localhost:<port>/chat'), set the path, and then request all messages that may already exist.
-    let port = (window.location.href).replace(/\D/g,'');
+    let port = (window.location.href).replace(/\D/g,''); // Regex to remove all but integers.
     const socket = io.connect(`http://localhost:${port}`, {'path': '/chat'});
     socket.emit('allMessages');
 

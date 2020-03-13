@@ -25,7 +25,7 @@ tr:nth-child(even) {
 
 .inputForm {
     flex: 1;
-    width: 49%;
+    width: 30%;
     margin-left: 2px;
     margin-right: 2px;
     background-color:rgb(106, 215, 223) ;
@@ -34,7 +34,7 @@ tr:nth-child(even) {
 
 .outputForm {
     flex: 1;
-    width: 49%;
+    width: 68%;
     margin-left: 2px;
     margin-right: 2px;
     background-color:rgb(101, 245, 214) ;
