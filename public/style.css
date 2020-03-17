@@ -1,9 +1,5 @@
 /* Client Page Styling */
 
-body {
-    display: flex;
-}
-
 button {
     margin: 2px;
 }
@@ -19,8 +15,16 @@ td {
     padding: 10px;
 }
 
+tr:nth-child(odd) {
+    background-color: #0634ff62;
+}
+
 tr:nth-child(even) {
-    background-color: #dddddd;
+    background-color: #0213615d;
+}
+
+.flex {
+    display: flex;
 }
 
 .inputForm {
@@ -33,12 +37,25 @@ tr:nth-child(even) {
 }
 
 .outputForm {
-    flex: 1;
+    flex: 4;
     width: 68%;
     margin-left: 2px;
     margin-right: 2px;
     background-color:rgb(101, 245, 214) ;
     border: 3px solid rgb(19, 0, 128);
+}
+
+.loginForm {
+    width: 20%;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 4px;
+    background-color:rgb(255, 200, 175) ;
+    border: 3px solid rgb(128, 26, 0);
+}
+
+.loginInput {
+    width: 80%;
 }
 
 #message-input {

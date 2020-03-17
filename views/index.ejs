@@ -18,22 +18,32 @@
 
   <!-- Main Document Body. -->
   <body>
-    <div class="outputForm">
-      <section id="chatroom"></section>
-      <nav id="message-input">
-        <button id="submit-message" type="button">Send Msg</button>
-        <input style="width:80%;" id="message" type="text" value=""/>
-      </nav>
-    </div>
+    <nav class="flex">
+      <div class="outputForm">
+        <section id="chatroom"></section>
+        <nav id="message-input">
+          <button id="submit-message" type="button">Send Msg</button>
+          <input style="width:80%;" id="message" type="text"/>
+        </nav>
+      </div>
 
-    <div class="inputForm">
-      <h2>Users List:</h2>
-      <table><nav id="tableStart"></nav></table>
-      <br><ul id="feedback"></ul><br>
-      <nav id="update-username">
-        <button id="submit-username" type="button">Set Name</button>
-        <input id="username" type="text" />
-      </nav>
+      <div class="inputForm">
+        <h2>Users List:</h2>
+        <table><nav id="tableStart"></nav></table>
+        <br><ul id="feedback"></ul><br>
+        <nav id="update-username">
+          <button id="submit-username" type="button">Set Name</button>
+          <input id="username" type="text"/>
+        </nav>
+      </div>
+    </nav>
+
+    <div class="loginForm">
+      <h2>Login:</h2>
+      <input required class="loginInput" id="login-uname" type="text"/>
+      <input required class="loginInput" id="login-pword" type="password"/>
+      <button id="submit-login" type="button">Login</button>
+      <button id="submit-register" type="button">Register</button>
     </div>
 
     <!-- Scripting -->

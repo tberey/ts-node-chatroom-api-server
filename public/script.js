@@ -3,7 +3,7 @@
 $(() => {
 
     //Set Socket.io connection to server/api url, (i.e. 'http://localhost:<port>/chat'), set the path, and then request all messages that may already exist.
-    let port = (window.location.href).replace(/\D/g,''); // Regex to remove all but integers.
+    var port = (window.location.href).replace(/\D/g,''); // Regex to remove all but integers.
     const socket = io.connect(`http://localhost:${port}`, {'path': '/chat'});
     socket.emit('allMessages');
 
@@ -76,8 +76,34 @@ $(() => {
     //Listen for a user typing signal, to build into Page DOM a message relaying who is typing. Set timer to remove element after 2 seconds.
     let bool = false;
 	socket.on('typing', (data) => {
-        
         if (feedback.html().indexOf(data) == -1) feedback.append(`<sub><i><li class="typing">${data} is typing...</i></sub></li>`);
         setTimeout(() => {feedback.html(''); bool=false;}, 2000);
+    });
+
+    // Listen for the register button ot be clicked, to create a new user in the database.
+    $('#submit-register').on('click',() => {
+        
+        // Clear input fields after capturing their values for data sent with POST Request.
+        let uname = $('#login-uname').val();
+        $('#login-uname').val('');
+        let pword = $('#login-pword').val();
+        $('#login-pword').val('');
+       
+        // POST Request, so register a new user and add to sql database.
+        $.ajax({
+            url:`http://localhost:${port}/register`,
+            method:"POST",
+            data:{
+              uname: uname,
+              pword: pword
+            },
+            success:function(response) {
+             console.log('success!!');
+           },
+           error:function(err){
+            console.log('error:' + err);
+           }
+        });
+        
     });
 });
