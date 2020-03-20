@@ -1,24 +1,103 @@
-// Client-Side Public Scripting
+// Client-Side Public Scripting for index.ejs (Chatroom).
 
 $(() => {
 
-    //Set Socket.io connection to server/api url, (i.e. 'http://localhost:<port>/chat'), set the path, and then request all messages that may already exist.
+    //Set extrapolate port from window href, setup Socket.io connection to server/api url, and then request all messages that may already exist.
     var port = (window.location.href).replace(/\D/g,''); // Regex to remove all but integers.
     const socket = io.connect(`http://localhost:${port}`, {'path': '/chat'});
     socket.emit('allMessages');
 
     // Declare DOM variables.
 	let message = $('#message');
-	let username = $('#username');
+    let username = $('#username');
+    let currentPass = $('#current-password');
+    let newPass = $('#new-password');
 	let sendMessage = $('#submit-message');
-	let submitUsername = $('#submit-username');
+    let submitUsername = $('#submit-username');
+    let submitPassword = $('#submit-password');
 	let chatroom = $('#chatroom');
     let feedback = $('#feedback');
     let usrList = $('#tableStart');
-    
-    // Emit change in username signal, to update server socket property.
+    let accountInfo = $('#account-info');
+    let usernameLog = $('#ulog');
+    let passwordLog = $('#plog');
+    var id;
+
+    // POST Request, to change exisitng username and ammend it to the new value in the sql database.
+    $.ajax({
+        url:'accountInfo',
+        method:'GET',
+        data: {
+                message: 'Account Information Request'
+            },
+            success:function(response) {
+                if (typeof response == 'object') {
+                    id = response.id;
+                    accountInfo.html(`<b>Username:</b> ${response.username} | <b>Unique ID:</b> ${response.id}`);
+                }
+            }
+    });
+
+    // Listen for change username button click, in order to update a user's username, by POST request.
     submitUsername.click(() => {
-        socket.emit('changeUsername', {username: username.val()});
+
+        // POST Request, to change exisitng username and ammend it to the new value in the sql database.
+        $.ajax({
+            url:'changeUsername',
+            method:'POST',
+
+            // Data to be sent in request body.
+            data: {
+                    usernameUpdate: username.val()
+                },
+
+                success:function(response) {
+                    // On successful request, emit change in username to server, to be broadcast out and display the returned server message, which times out.
+                    socket.emit('changeUsername', {username: username.val()});
+                    usernameLog.html(response);
+                    accountInfo.html(`<b>Username:</b> ${username.val()} | <b>Unique ID:</b> ${id}`);
+                    setTimeout(() => usernameLog.html(''), 10000);
+                },
+
+                error:function(err) {
+                    
+                    // On unsuccessful request, display returned server message, and time it out.
+                    usernameLog.html(err.responseText);
+                    setTimeout(() => usernameLog.html(''), 10000);
+                }
+        });
+    });
+
+    // Listen for change password button click, in order to update a user's password, by POST request.
+    submitPassword.click(() => {
+
+        // POST Request, to change exisitng username and ammend it to the new value in the sql database.
+        $.ajax({
+            url:'changePassword',
+            method:'POST',
+
+            // Data to be sent in request body.
+            data: {
+                    currentPassword: currentPass.val(),
+                    newPassword: newPass.val()
+                },
+
+                success:function(response) {
+                    // On successful request, display returned server message and time it out.
+                    passwordLog.html(response);
+                    setTimeout(() => passwordLog.html(''), 10000);
+                },
+
+                error:function(err) {
+                    // On unsuccessful request, display returned server message and time it out.
+                    passwordLog.html(err.responseText);
+                    setTimeout(() => passwordLog.html(''), 10000);
+                }
+        });
+
+        // Clear input fields, after capturing data.
+        currentPass.val('');
+        newPass.val('');
     });
 
     // Emit new message signal, to update server of message to broadcast/emit to connected sockets.
@@ -73,37 +152,10 @@ $(() => {
         socket.emit('typing');
     });
     
-    //Listen for a user typing signal, to build into Page DOM a message relaying who is typing. Set timer to remove element after 2 seconds.
+    // Listen for a user typing signal, to build into Page DOM a message relaying who is typing. Set timer to remove element after 2 seconds.
     let bool = false;
 	socket.on('typing', (data) => {
         if (feedback.html().indexOf(data) == -1) feedback.append(`<sub><i><li class="typing">${data} is typing...</i></sub></li>`);
         setTimeout(() => {feedback.html(''); bool=false;}, 2000);
-    });
-
-    // Listen for the register button ot be clicked, to create a new user in the database.
-    $('#submit-register').on('click',() => {
-        
-        // Clear input fields after capturing their values for data sent with POST Request.
-        let uname = $('#login-uname').val();
-        $('#login-uname').val('');
-        let pword = $('#login-pword').val();
-        $('#login-pword').val('');
-       
-        // POST Request, so register a new user and add to sql database.
-        $.ajax({
-            url:`http://localhost:${port}/register`,
-            method:"POST",
-            data:{
-              uname: uname,
-              pword: pword
-            },
-            success:function(response) {
-             console.log('success!!');
-           },
-           error:function(err){
-            console.log('error:' + err);
-           }
-        });
-        
     });
 });

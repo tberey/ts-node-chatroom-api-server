@@ -23,7 +23,7 @@
         <section id="chatroom"></section>
         <nav id="message-input">
           <button id="submit-message" type="button">Send Msg</button>
-          <input style="width:80%;" id="message" type="text"/>
+          <input style="width:80%;" id="message" type="text" required/>
         </nav>
       </div>
 
@@ -33,17 +33,19 @@
         <br><ul id="feedback"></ul><br>
         <nav id="update-username">
           <button id="submit-username" type="button">Set Name</button>
-          <input id="username" type="text"/>
+          <input id="username" type="text" required/>
+          <span id="ulog"></span>
         </nav>
       </div>
     </nav>
 
-    <div class="loginForm">
-      <h2>Login:</h2>
-      <input required class="loginInput" id="login-uname" type="text"/>
-      <input required class="loginInput" id="login-pword" type="password"/>
-      <button id="submit-login" type="button">Login</button>
-      <button id="submit-register" type="button">Register</button>
+    <div class="accountForm">
+      <h2><i><u>Your Account:</u></i></h2>
+      <p id="account-info"></p><br>
+      <input required class="passwordInput" id="current-password" type="password" placeholder="Current Password" required/>
+      <input required class="passwordInput" id="new-password" type="password" placeholder="New Password" required/>
+      <button id="submit-password" type="button">Change Password</button><br>
+      <span id="plog"></span>
     </div>
 
     <!-- Scripting -->

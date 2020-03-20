@@ -1,19 +1,19 @@
-# Chat Room Browser App: (TypeScript + Node.js)
+# User Authenticated Chat Room Browser App: (TypeScript + Node.js + SQL)
 
 
 ***
 
 
-## A locally hosted http REST API, made in Typescript and Node, with Express and Socket.IO frameworks.
+## A locally hosted http REST API, made in Typescript and Node, with Express and Socket.IO frameworks, supported by a MySQL database.
 
-### <i> Join the chatroom, assign yourself a optional custom user-name, and simply coverse with all the users in the session. All done in real-time dynamically.
+### <i> Login/Register and join the chatroom, presented in real-time and dynamically. Manage your account, such as changing password or username (which are both needed to login!). Account information is all queried/edited/stored via a MySQL database.
 
 <br>
 
 ***
 
 ### Client Page (Front-End) Homepage: <br>
-#### <b>http://localhost:<Port\>/chat</b>
+#### <b>http://localhost:<Port\>/</b>
 
 ***
 
@@ -33,3 +33,4 @@
 |Version 0.2.1 [2020-03-12]|<ul><li>Add feature to show all users who may be typing concurrently (so more than one at a time).</li><li>Add server messages feature, to alert connected users of updates to other connected users. I.e. connecting/disconnecting.</li><li>Fix bug, where when any user sends a message it would clear all user's input field of text.</li><li>General code sharpening/tidying, and minor client-side DOM adjustments.</li><li>Update README.md</li></ul>|
 |Version 0.2.2 [2020-03-13]|<ul><li>Friday the 13th Update, spoooky.</li><li>Add basic mySQL database infrastructure and connection.</li><li>Update Screenshots.</li><li>Update README.md</li></ul>|
 |Version 0.2.3 [2020-03-17]|<ul><li>Add further mySQL database infrastructure, including add a new entry row comprised of ID(Pri Key), Username and Password(Hashed).</li><li>Add new front-end form, for use to make a post request on register button, to add new user details to db.</li><li>Add new dependacy/module, for parseing request body.</li><li>Update README.md</li></ul>|
+|Version 0.3.0 [2020-03-20]|<ul><li>Big Update - Full Database Integration and Support.</li><li>Add full user authentification to login client page, in order to access chatroom.</li><li>Complete the login client page registration feature, including adding new users as a row to sql db.</li><li>Full chatroom username and unique ID integration with sql db - all details are pulled from db.</li><li>Add my account section to chatroom client page, with an account overview.</li><li>Ability to change password in the my account section of chatroom, reflected into db also.</li><li>Update change username to also update account section and sql database entry.</li><li>Redirections: When not logged in, always redirect too the login client page. When logged in, always redirect to chatroom client page.</li><li>Update README.md</li></ul>|

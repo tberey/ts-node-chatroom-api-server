@@ -1,0 +1,134 @@
+<!-- Client served Login/Register Page. -->
+
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                background-color: rgba(237, 215, 245, 0.658);
+            }
+
+            form {
+                border: 3px solid #0398b3;
+                text-align: center;
+                width: 100%;
+                background-color:#00ffc831;
+            }
+
+            p {
+                text-align: center;
+            }
+
+            input[type=text], input[type=password] {
+            width: 60%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1.5px solid rgb(21, 75, 0);
+            box-sizing: border-box;
+            }
+
+            button {
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 60%;
+            max-width: 500px;
+            display: inline-block;
+            }
+
+            #submit-register {
+                background-color: rgb(20, 103, 114);
+            }
+
+            #submit-login {
+                background-color: rgb(1, 107, 4);
+            }
+
+            button:hover {
+            opacity: 0.7;
+            }
+
+            .container {
+            padding: 16px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h2>Welcome to ChatRoom 1.0</h2>
+        <form>
+            <h3>Login/Register</h3>
+            <div class="container" style="background-color:#00ff557a">
+                <input type="text" placeholder="Enter Username" name="username" id="uname" required>
+                <input type="password" placeholder="Enter Password" name="password" id="pword" required><br>
+                <button type="button" id="submit-login">Login</button>
+            </div>
+            <div class="container" style="background-color:#00ffc831">
+                <button type="button" id="submit-register">Register</button>
+            </div>
+        </form>
+        <div>
+            <p id="login-msg"></p>
+        </div>
+
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+        <script>
+            // Listen for the register button being clicked, to create a new user in the database.
+            $('#submit-register').on('click', () => {
+                
+                // POST Request, to register a new user and add it to sql database, and show any resulting server messages.
+                $.ajax({
+                    url:'register',
+                    method:'POST',
+                    data: {
+                            username: $('#uname').val(),
+                            password: $('#pword').val()
+                        },
+                        success:function(response) {
+                            $('#login-msg').html(response);
+                        },
+                        error:function(err) {
+                            $('#login-msg').html(err.responseText);
+                        }
+                });
+
+                // Clear input fields after capturing their values for data sent with POST Request.
+                $('#uname').val('');
+                $('#pword').val('');
+            });
+
+            // Listen for the login button being clicked, to login and redirect.
+            $('#submit-login').on('click', () => {
+                
+                // POST Request, to login with an existing user and either return a resulting message, or redirect to the chatroom.
+                $.ajax({
+                    url:'login',
+                    method:'POST',
+                    data: {
+                            username: $('#uname').val(),
+                            password: $('#pword').val()
+                        },
+                        success:function(response) {
+                            $('#login-msg').html(response);
+                            if (response.indexOf('/chat') > -1) window.location.pathname = response;
+                        },
+                        error:function(err) {
+                            $('#login-msg').html(err.responseText);
+                        }
+                });
+
+                // Clear input fields after capturing their values for data sent with POST Request.
+                $('#pword').val('');
+                $('#uname').val('');
+            });
+        </script>
+    </body>
+</html>

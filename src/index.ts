@@ -4,41 +4,35 @@ NOTES/TODO/BUGS/FIXES:-
 
 ==================================================================================================
 
-
-1) Add user authetification/login, using sql db (and replace unique id with logged in credentials username, so to keep abaility to change name in chat).
+1) Add logout button to my account section of Chatroom index page.
 
 -------------------------------------------------------------------------------------------------
 */
 
-
-
-// Dependancies.
+// Global Dependancies.
 import express from "express";
+import session from "express-session";
 import http from "http";
 import SocketIOServer from "socket.io";
 import mySQL from "mysql";
 import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 
-// Import external function.
+// Import external functions, as Globals.
 import initializeSocketIO from "./socket";
+import appRoutes from "./routes"
 
-//Global Constants.
+// Global Constants.
 const app = express(); // Initialise express web app framework.
 const server = new http.Server(app); // Initialise a new server object on http.
 const io = SocketIOServer(server, {'path': '/chat'}); // Initialise new instance of socket.io on server.
 const port = process.env.PORT || 8001; // Set server port.
-const db = mySQL.createConnection({ // Server connection to use to db.
+const db = mySQL.createConnection({ // Server connection setup to db.
     host: 'localhost',
     user: 'root',
     password: '',
     database: 'Chatroom_Users'
 });
-
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Call imported function, passing the io server as argument. The server connects a client via a socket, so another new socket opens for the server to listen for further connections.
-initializeSocketIO(io);
 
 // Initialise a live connection to db, unless error thrown.
 db.connect((err) => {
@@ -48,56 +42,27 @@ db.connect((err) => {
     console.log('DB Connected!');
 });
 
-// Set view engine (express page templates engine) to 'ejs' files, to serve client page.
+// Create a private and secure cached session, where username & password are held. Used to store this data past a page/connection redirection.
+app.use(session({
+    secret: 'SEcReT93',
+    resave: false,
+    saveUninitialized: true
+}));
+
+// Parse data for middleware.
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// Set view engine (express page templates engine) to 'ejs' files, to render/serve client compiled to html. Specify external directories with static files to expose (for access).
 app.set('view engine', 'ejs');
-
-// Specify external scripts directory path/structure to expose, so can be accessed by ejs/html index page script call.
 app.use(express.static('public'));
+//app.use(express.static('views'));
 
-// Render and serve client index ejs template page, from template engine (views dir).
-app.get('/chat', (req,res) => {
-    res.render('index');
-});
+// Call imported functions, passing required arguments. The server connects a client via a socket, so another new socket opens for the server to listen for further connections.
+appRoutes(app,db,bcrypt);
+initializeSocketIO(io);
 
-
-
-// Start server and listen on port for incoming connections.
+// Start server and listen on the assigned port for incoming connections.
 server.listen(port, () => {
-    console.log(`server started at http://localhost:${port}/chat`);
+    console.log(`server started at http://localhost:${port}/`);
 });
-
-// POST Method for the request made to login, with the details supplied by user. http://localhost:<port>/register
-app.post('/register', (req,res) => {
-    bcrypt.hash(req.body.pword,10, (err,hash) => {
-        console.log('1: ' + err);
-        console.log('hash: ' + hash);
-        const query = `INSERT INTO users (username, password)
-        VALUES ('${req.body.uname}','${hash}');`;
-        db.query(query, (err, result) => {
-            if (err) {
-                console.log('2: ' + err);
-                return res.status(500).send(err);
-            }
-            console.log(result);
-        });
-    });
-});
-
-/*
-let usernameQuery = "SELECT * FROM `players` WHERE user_name = '" + username + "'";
-
-        db.query(usernameQuery, (err, result) => {
-            if (err) {
-                return res.status(500).send(err);
-            }
-
-
-
-let query = "SELECT * FROM `players` ORDER BY id ASC"; // query database to get all the players
-
-        // execute query
-        db.query(query, (err, result) => {
-            if (err) {
-                res.redirect('/');
-            }
-*/

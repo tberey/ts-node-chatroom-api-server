@@ -1,15 +1,14 @@
 // Server Sockets Handling (Connections and Signals) Exported Function. Imported into index.ts.
 
-// Dependancies.
+// Imported Variables/Types.
 import {Server, Socket} from "socket.io";
+import {exportUsername, exportID} from "./routes";
 
-// Define interfaces/types.
+// Define and Export interfaces/types.
 export interface IUser {
     name: String;
     uniqueID: Number;
-    
 };
-
 export interface IMessage {
     message: String;
     user: IUser;
@@ -25,16 +24,15 @@ export default (io:Server) => {
     const userSet: Set<IUser> = new Set();
 
     // Listen for all connections to server.
-    io.on('connection', (socket:Socket, user:IUser, uid: Number, connectDateTime:Date, serverMsg:String) => {
+    io.on('connection', (socket:Socket, user:IUser, connectDateTime:Date, serverMsg:String) => {
         
-        // Set Socket's id, username, create a user using this information we just set, and also set connection date/time.
-        uid = Math.abs(Math.floor(Math.random() * 999 - Math.random() * 999));
-        user = {uniqueID: uid, name: `Messenger#${uid}`};
+        // Create a user using imported username and id varibales, and also set connection date/time.
+        user = {uniqueID: exportID, name: exportUsername};
         connectDateTime = new Date(socket.handshake.time);
 
         // Add newly connected user to set, and emit clients to clear exisiting user list (and send a server msg), and replace with updated list (emit to all sockets).
         userSet.add(user);
-        serverMsg = `A new messenger has arrived! Welcome "${user.name}"! <i style="font-size:x-small;">[<b>ID:</b> ${user.uniqueID} - ${connectDateTime.toLocaleString()}]</i>`;
+        serverMsg = `A new messenger has arrived! Welcome '${user.name}'! <i style="font-size:x-small;">[<b>ID:</b> ${user.uniqueID} - ${connectDateTime.toLocaleString()}]</i>`;
         io.sockets.emit('deleteList', serverMsg);
         userSet.forEach((val) => {io.sockets.emit('userListItem', val);});
         
@@ -74,7 +72,7 @@ export default (io:Server) => {
         });
 
         // Listen for an allMessages signal. Send all current messages to client, in the set 'messageSet', stored on server as constant.
-        socket.on("allMessages", () => {
+        socket.on('allMessages', () => {
             messageSet.forEach((msg) => {socket.emit('msgSetItem', msg);});
         });
 
@@ -82,7 +80,7 @@ export default (io:Server) => {
         socket.on('disconnect', () => {
 
             // Emit to first clear client-side user lists (and send server msg to chat), next find and delete user from set, then resend user list set to all sockets, item by item.
-            serverMsg = `"${user.name}" disconnected, bye! <i style="font-size:x-small;">[<b>ID:</b> ${user.uniqueID} - ${connectDateTime.toLocaleString()}]</i>`;
+            serverMsg = `'${user.name}' disconnected, bye! <i style="font-size:x-small;">[<b>ID:</b> ${user.uniqueID} - ${connectDateTime.toLocaleString()}]</i>`;
             io.sockets.emit('deleteList', serverMsg);
             userSet.forEach((val) => {
                 if (val.uniqueID == user.uniqueID) userSet.delete(val);

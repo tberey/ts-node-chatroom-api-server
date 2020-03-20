@@ -45,7 +45,7 @@ tr:nth-child(even) {
     border: 3px solid rgb(19, 0, 128);
 }
 
-.loginForm {
+.accountForm {
     width: 20%;
     margin-left: 2px;
     margin-right: 2px;
@@ -54,7 +54,7 @@ tr:nth-child(even) {
     border: 3px solid rgb(128, 26, 0);
 }
 
-.loginInput {
+.passwordInput {
     width: 80%;
 }
 
@@ -77,4 +77,9 @@ tr:nth-child(even) {
     height: 300px;
     overflow: scroll;
     background-color:rgb(165, 245, 158) ;
+}
+
+#account-info {
+    font-size: small;
+    text-align: center;
 }
