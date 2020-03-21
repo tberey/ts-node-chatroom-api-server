@@ -19,11 +19,12 @@
   <!-- Main Document Body. -->
   <body>
     <nav class="flex">
+
       <div class="outputForm">
         <section id="chatroom"></section>
         <nav id="message-input">
           <button id="submit-message" type="button">Send Msg</button>
-          <input style="width:80%;" id="message" type="text" required/>
+          <input required id="message" type="text"/>
         </nav>
       </div>
 
@@ -31,26 +32,42 @@
         <h2>Users List:</h2>
         <table><nav id="tableStart"></nav></table>
         <br><ul id="feedback"></ul><br>
-        <nav id="update-username">
-          <button id="submit-username" type="button">Set Name</button>
-          <input id="username" type="text" required/>
-          <span id="ulog"></span>
-        </nav>
       </div>
+
     </nav>
 
     <div class="accountForm">
+      
       <h2><i><u>Your Account:</u></i></h2>
-      <p id="account-info"></p><br>
-      <input required class="passwordInput" id="current-password" type="password" placeholder="Current Password" required/>
-      <input required class="passwordInput" id="new-password" type="password" placeholder="New Password" required/>
-      <button id="submit-password" type="button">Change Password</button><br>
-      <span id="plog"></span>
+      <p id="account-info"></p><hr><br>
+
+      <div id="collapse-user"style="background-color: #3b4efc9a;"><b>[+/-]</b> Change your User Name <b>[+/-]</b></div>
+      <span class="collapse" id="update-username">
+        <br>
+        <input required class="passUserInputs" id="username" type="text" placeholder="New Username"/>
+        <button id="submit-username" type="button">Change Username</button>
+      </span>
+      <span id="userlog"></span>
+
+      <br>
+
+      <div id="collapse-pass" style="background-color: #fc3b3b9a;"><b>[+/-]</b> Change your Password <b>[+/-]</b></div>
+      <span class="collapse" id="update-password">
+        <br>
+        <input required class="passUserInputs" id="current-password" type="password" placeholder="Current Password"/>
+        <input required class="passUserInputs" id="new-password" type="password" placeholder="New Password"/>
+        <input required class="passUserInputs" id="confirm-new-password" type="password" placeholder="Confirm New Password"/>
+        <button id="submit-password" type="button">Change Password</button>
+      </span>
+      <span id="passlog"></span>
+      
     </div>
 
     <!-- Scripting -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="script.js"></script>
-  </body>
 
+    <script src="script.js"></script>
+
+  </body>
+  
 </html>

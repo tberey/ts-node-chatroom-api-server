@@ -54,18 +54,15 @@ tr:nth-child(even) {
     border: 3px solid rgb(128, 26, 0);
 }
 
-.passwordInput {
+.passUserInputs {
     width: 80%;
 }
 
-#message-input {
-    position: sticky;
-    top: 99%;
+.collapse {
+    display: none;
 }
 
-#update-username {
-    padding-left: 2%;
-    padding-bottom: 1%;
+#message-input {
     position: sticky;
     top: 99%;
 }
@@ -82,4 +79,12 @@ tr:nth-child(even) {
 #account-info {
     font-size: small;
     text-align: center;
+}
+
+#message {
+    width: 80%;
+}
+
+[id^=collapse-] {
+    display:inline-block;
 }

@@ -5,6 +5,10 @@ NOTES/TODO/BUGS/FIXES:-
 ==================================================================================================
 
 1) Add logout button to my account section of Chatroom index page.
+2) Add delete account button to my account section of chatroom.
+3) Add profile pic upload option? Shows in account section, as well as a smaller version in the chat.
+4) Forgot username/password options. (So add emails to db? or method of recovery by id).
+5) If emails added to db, send notifications about signing up/forgot details etc.
 
 -------------------------------------------------------------------------------------------------
 */
@@ -56,7 +60,6 @@ app.use(bodyParser.json());
 // Set view engine (express page templates engine) to 'ejs' files, to render/serve client compiled to html. Specify external directories with static files to expose (for access).
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
-//app.use(express.static('views'));
 
 // Call imported functions, passing required arguments. The server connects a client via a socket, so another new socket opens for the server to listen for further connections.
 appRoutes(app,db,bcrypt);

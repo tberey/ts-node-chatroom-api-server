@@ -1,5 +1,5 @@
 {
-  "name": "ts-node-chat-api",
+  "name": "ts-node-sql-chat-api",
   "version": "1.0.0",
   "description": "A simple live chat REST API",
   "main": "dist/index.js",

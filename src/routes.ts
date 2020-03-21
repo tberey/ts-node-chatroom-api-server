@@ -3,20 +3,26 @@
 // Global Space
 var exportUsername:String;
 var exportID:Number;
-export {exportUsername, exportID}; // Export stored signed-in Username.
+
+// Export stored signed-in Username and ID.
+export {exportUsername, exportID};
 
 // Exported as anonymous function, and handles all server traffic routing/requests.
 export default (app:Function, db:Object, bcrypt:Object) => {
 
-    //Render and serve the client login/register page.  http://localhost:<port>/
-    app.get('/', (req:Object,res:Object) => req.session.loggedin ? res.redirect('/chat') : res.render('login'));
+    // GET request, to render and serve the client login/register page.
+    app.get('/', (req:Object,res:Object) => req.session.loggedin ? res.status(307).redirect('/chat') : res.status(200).render('login'));
 
-    // Render and serve client index (chatroom) client page, if logged-in, otherwise redirects to root (and serves client login page). http://localhost:<port>/chat
-    app.get('/chat', (req:Object,res:Object) => req.session.loggedin ? res.render('index') : res.redirect('/'));
+    // GET, to render and serve client index (chatroom) client page, if logged-in, otherwise redirects to root (and serves client login page).
+    app.get('/chat', (req:Object,res:Object) => req.session.loggedin ? res.status(200).render('index') : res.status(403).redirect('/'));
 
-    app.get('/accountInfo', (req:Object, res:Object) => req.session.loggedin ? res.status(200).send({id: exportID, username: exportUsername}) : res.redirect('/'));
+    // Client GET request for logged-in account information, to be displayed on the client's chatroom page, in the account section.
+    app.get('/accountInfo', (req:Object, res:Object) => req.session.loggedin ? res.status(200).send({id: exportID, username: exportUsername}) : res.status(403).redirect('/'));
 
-    // POST Method for the request made to login, with the details supplied by user queried against the sql db. http://localhost:<port>/login
+    // Catch any unresolved url requests to no-man's land, and direct to correct page.
+    app.get('*', (req:Object, res:Object) => req.session.loggedin ? res.status(404).redirect('/chat') : res.status(404).redirect('/'));
+
+    // POST Method for the request made to login, with the details supplied by user queried against the sql db.
     app.post('/login', function(req:Object, res:Object) {
         
         // Capture username and password, supplied with request body from client.
@@ -54,7 +60,7 @@ export default (app:Function, db:Object, bcrypt:Object) => {
     });
 
 
-    // POST Method for the request made to register, with the details supplied by user added to the sql db. http://localhost:<port>/register
+    // POST Method for the request made to register, with the details supplied by user added to the sql db.
     app.post('/register', (req:Object, res:Object) => {
         
         // Capture username and password, supplied with request body from client.
@@ -86,7 +92,7 @@ export default (app:Function, db:Object, bcrypt:Object) => {
         } else res.status(422).send(`Please enter both a Username and Password.`); // Unsuccessful request, as both a username and password were not found in request body.
     });
 
-    // POST Method for request made to change current username, with the new username supplied by input, and ammend in the sql db. http://localhost:<port>/changeUsername
+    // POST Method for request made to change current username, with the new username supplied by input, and ammend in the sql db.
     app.post('/changeUsername', (req:Object, res:Object) => {
         
         let newUsername: String = req.body.usernameUpdate; // Capture the new username requested change.
@@ -108,14 +114,14 @@ export default (app:Function, db:Object, bcrypt:Object) => {
                         req.session.username, exportUsername = newUsername; // Update all username data instances with new username.
 
                         // Successful request and so send back successful status, with server message.
-                        res.status(201).send(`Successfully updated username to '${newUsername}'. Please also now login using this new username.`);
+                        res.status(201).send({serverMsg: `Successfully updated username to '${newUsername}'. Please also now login using this new username.`, id: exportID});
                     });
                 } else res.status(409).send(`Username already exists. Please try another.`); // Unsuccessful request, as query found username, so return status and message.
             });
         } else res.status(422).send(`Please enter a new username.`); // Unsuccessful request, as a username was not found in request body.
     });
 
-    // POST Method for request made to change current password, with the new password supplied by input, and ammend in the sql db. http://localhost:<port>/changePassword
+    // POST Method for request made to change current password, with the new password supplied by input, and ammend in the sql db.
     app.post('/changePassword', (req:Object, res:Object) => {
         
          // Capture both the current and new password, included with request body.
