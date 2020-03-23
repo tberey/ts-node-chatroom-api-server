@@ -4,6 +4,9 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Login/Register</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
         <style>
             body {
                 font-family: Arial, Helvetica, sans-serif;
@@ -14,27 +17,28 @@
                 text-align: center;
                 width: 100%;
                 background-color:#00ffc831;
+                font-family: 'Lobster', serif;
             }
             p {
                 text-align: center;
             }
             input[type=text], input[type=password] {
-            width: 60%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            display: inline-block;
-            border: 1.5px solid rgb(21, 75, 0);
-            box-sizing: border-box;
+                width: 60%;
+                padding: 12px 20px;
+                margin: 8px 0;
+                display: inline-block;
+                border: 1.5px solid rgb(21, 75, 0);
+                box-sizing: border-box;
             }
             button {
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            cursor: pointer;
-            width: 60%;
-            max-width: 500px;
-            display: inline-block;
+                color: white;
+                padding: 14px 20px;
+                margin: 8px 0;
+                border: none;
+                cursor: pointer;
+                width: 60%;
+                max-width: 500px;
+                display: inline-block;
             }
             #submit-register {
                 background-color: rgb(20, 103, 114);
@@ -43,15 +47,15 @@
                 background-color: rgb(1, 107, 4);
             }
             button:hover {
-            opacity: 0.7;
+                opacity: 0.7;
             }
             .container {
-            padding: 16px;
+                padding: 16px;
             }
         </style>
     </head>
     <body>
-        <h2>Welcome to ChatRoom 1.0</h2>
+        <h2 style="font-family:'Pacifico';">Welcome to ChatRoom 1.0</h2>
         <form>
             <h3>Login/Register</h3>
             <div class="container" style="background-color:#00ff557a">
@@ -73,6 +77,10 @@
             let username = $('#uname');
             let password = $('#pword');
             let msg = $('#login-msg');
+            
+            // Font random color assignment, for login screen animations.
+            const randomColor = (colors = ['red','blue','green','orange','purple','black','orangered']) => {return colors[Math.floor(Math.random() * colors.length)]};
+            setInterval(() => $(document.body).css('color', randomColor()) , 2500);
 
             // Listen for the register button being clicked, to create a new user in the database.
             $('#submit-register').on('click', () => {
@@ -102,7 +110,7 @@
                         username: username.val(),
                         password: password.val()
                     },
-                    success:function(response) {
+                    success:(response) => {
                         msg.html(response);
                         if (response.indexOf('/chat') > -1) window.location.pathname = response;
                     },

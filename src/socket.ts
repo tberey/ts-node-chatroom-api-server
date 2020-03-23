@@ -2,7 +2,6 @@
 
 // Imported Variables/Types.
 import {Server, Socket} from "socket.io";
-import {exportUsername, exportID} from "./routes";
 
 // Define and Export interfaces/types.
 export interface IUser {
@@ -27,7 +26,7 @@ export default (io:Server) => {
     io.on('connection', (socket:Socket, user:IUser, connectDateTime:Date, serverMsg:String) => {
         
         // Create a user using imported username and id varibales, and also set connection date/time.
-        user = {uniqueID: exportID, name: exportUsername};
+        user = {uniqueID: socket.request.session.uid, name: socket.request.session.username};
         connectDateTime = new Date(socket.handshake.time);
 
         // Add newly connected user to set, and emit clients to clear exisiting user list (and send a server msg), and replace with updated list (emit to all sockets).
@@ -39,8 +38,8 @@ export default (io:Server) => {
         // Listen for a change in username request, to update it.
         socket.on('changeUsername', (data) => {
             
-            // Inform client to clear it's user list in preparation for the new updated list.
-            io.sockets.emit('deleteList');
+            io.sockets.emit('deleteList'); // Inform client to clear it's user list in preparation for the new updated list.
+
             // Update username in the set and emit new user list to all sockets, then only after do we change username for the connected socket that requested it. Cannot emit a full set, hence loop.
             userSet.forEach((val) => {
                 if (val.name == user.name) val.name = data.username;
@@ -78,7 +77,6 @@ export default (io:Server) => {
 
         // Listen for any sockets disconnecting, to supply informative information to be logged.
         socket.on('disconnect', () => {
-
             // Emit to first clear client-side user lists (and send server msg to chat), next find and delete user from set, then resend user list set to all sockets, item by item.
             serverMsg = `'${user.name}' disconnected, bye! <i style="font-size:x-small;">[<b>ID:</b> ${user.uniqueID} - ${connectDateTime.toLocaleString()}]</i>`;
             io.sockets.emit('deleteList', serverMsg);

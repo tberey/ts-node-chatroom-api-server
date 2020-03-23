@@ -4,16 +4,16 @@ NOTES/TODO/BUGS/FIXES:-
 
 ==================================================================================================
 
-1) Add logout button to my account section of Chatroom index page.
-2) Add delete account button to my account section of chatroom.
-3) Add profile pic upload option? Shows in account section, as well as a smaller version in the chat.
-4) Forgot username/password options. (So add emails to db? or method of recovery by id).
-5) If emails added to db, send notifications about signing up/forgot details etc.
+1) Add delete account button to my account section of chatroom.
+2) Add profile pic upload option? Shows in account section, as well as a smaller version in the chat.
+3) Forgot username/password options. (So add emails to db? or method of recovery by id).
+4) If emails added to db, send notifications about signing up/forgot details etc.
+5) Prevent multiple logging into the same account.
 
 -------------------------------------------------------------------------------------------------
 */
 
-// Global Dependancies.
+// Global Imported Modules/Dependancies.
 import express from "express";
 import session from "express-session";
 import http from "http";
@@ -22,20 +22,21 @@ import mySQL from "mysql";
 import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 
-// Import external functions, as Globals.
+// Globals Imported external Functions/Data.
 import initializeSocketIO from "./socket";
-import appRoutes from "./routes"
+import appRoutes from "./routes";
+import privateData from "../config/private.json";
 
 // Global Constants.
 const app = express(); // Initialise express web app framework.
 const server = new http.Server(app); // Initialise a new server object on http.
 const io = SocketIOServer(server, {'path': '/chat'}); // Initialise new instance of socket.io on server.
 const port = process.env.PORT || 8001; // Set server port.
-const db = mySQL.createConnection({ // Server connection setup to db.
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'Chatroom_Users'
+const db = mySQL.createConnection(privateData.dbConnection);
+const sessionMiddleware = session({
+    secret: privateData.sessionSecret,
+    saveUninitialized: true,
+    resave: true
 });
 
 // Initialise a live connection to db, unless error thrown.
@@ -46,12 +47,12 @@ db.connect((err) => {
     console.log('DB Connected!');
 });
 
-// Create a private and secure cached session, where username & password are held. Used to store this data past a page/connection redirection.
-app.use(session({
-    secret: 'SEcReT93',
-    resave: false,
-    saveUninitialized: true
-}));
+io.use((socket, next) => {
+    sessionMiddleware(socket.request, socket.request.res, next);
+});
+
+// Create a private cached session, where username & password are held. Used to store this data past a page/connection redirection.
+app.use(sessionMiddleware);
 
 // Parse data for middleware.
 app.use(bodyParser.urlencoded({ extended: true }));

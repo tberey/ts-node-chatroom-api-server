@@ -1,9 +1,5 @@
 /* Client Page Styling */
 
-button {
-    margin: 2px;
-}
-
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
@@ -12,7 +8,7 @@ table {
 td {
     border: 2px solid #dddddd;
     text-align: center;
-    padding: 10px;
+    padding: 6px;
 }
 
 tr:nth-child(odd) {
@@ -23,57 +19,80 @@ tr:nth-child(even) {
     background-color: #0213615d;
 }
 
-.flex {
-    display: flex;
-}
-
-.inputForm {
-    flex: 1;
-    width: 30%;
-    margin-left: 2px;
-    margin-right: 2px;
-    background-color:rgb(106, 215, 223) ;
-    border: 3px solid rgb(19, 0, 128);
-}
-
-.outputForm {
-    flex: 4;
-    width: 68%;
-    margin-left: 2px;
-    margin-right: 2px;
-    background-color:rgb(101, 245, 214) ;
-    border: 3px solid rgb(19, 0, 128);
-}
-
-.accountForm {
-    width: 20%;
-    margin-left: 2px;
-    margin-right: 2px;
-    margin-top: 4px;
-    background-color:rgb(255, 200, 175) ;
-    border: 3px solid rgb(128, 26, 0);
-}
-
-.passUserInputs {
-    width: 80%;
-}
-
 .collapse {
     display: none;
 }
 
-#message-input {
-    position: sticky;
-    top: 99%;
+.break {
+    flex-basis: 100%;
+    height: 0;
+  }
+
+.passUserInputs {
+    width: 90%;
+    margin-bottom: 1px;
+}
+
+#flex {
+    display: flex;
+    height: 60vh;
+    width: 99vw;
+    margin-bottom: 4px;
+    min-height: 230px;
+    font-family: 'Comfortaa', serif;
+}
+
+#usersSection {
+    flex: 1;
+    background-color:rgb(106, 215, 223) ;
+    border: 3px solid rgb(19, 0, 128);
+    overflow: scroll;
+    min-width: 160px;
+}
+
+#outputForm {
+    flex: 4;
+    background-color:rgb(101, 245, 214);
+    border: 3px solid rgb(19, 0, 128);
+    margin-right: 3px;
+}
+
+#messagingSection {
+    
+    padding: 2px;
+    margin-bottom: 4px;
+    background-color:rgba(30, 160, 106, 0.801) ;
+    border: 3px solid rgb(1, 44, 16);
+    overflow: visible;
+    height: fit-content;
+}
+
+#message {
+    display: relative;
+    width: 80%;
+}
+
+#accountSection {
+    width: 306px;
+    height: 270px;
+    background-color:rgb(255, 200, 175) ;
+    border: 3px solid rgb(128, 26, 0);
+    overflow-y: scroll;
+    font-family: 'Marcellus SC', serif;
 }
 
 #chatroom {
-    width: 96%;
-    margin-left: 2%;
-    margin-top: 6px;
-    height: 300px;
-    overflow: scroll;
-    background-color:rgb(165, 245, 158) ;
+    width: 98%;
+    margin-left: 1%;
+    margin-top: 1%;
+    height: 93%;
+    overflow-y: scroll;
+    background-color:rgb(165, 245, 158);
+}
+
+#submit-message {
+    width: 58px;
+    font-size: small;
 }
 
 #account-info {
@@ -81,10 +100,21 @@ tr:nth-child(even) {
     text-align: center;
 }
 
-#message {
-    width: 80%;
+#submit-logout {
+    position: relative;
+    left: 35%;
 }
 
-[id^=collapse-] {
-    display:inline-block;
+#update-username {
+    background-color: #3b4efc9a;
+}
+
+#update-password {
+    background-color: #fc3b3b9a;
+}
+
+#prompt {
+    position: relative;
+    left: 29%;
+    font-size: small;
 }

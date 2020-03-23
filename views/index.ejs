@@ -13,54 +13,62 @@
 
     <!-- Stylesheet and client dependancy CDN remote Script. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Caveat">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Marcellus+SC">
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
 
   <!-- Main Document Body. -->
   <body>
-    <nav class="flex">
-
-      <div class="outputForm">
+    <div id="flex">
+      <div id="outputForm">
         <section id="chatroom"></section>
-        <nav id="message-input">
-          <button id="submit-message" type="button">Send Msg</button>
-          <input required id="message" type="text"/>
-        </nav>
       </div>
 
-      <div class="inputForm">
+      <div id="usersSection">
         <h2>Users List:</h2>
         <table><nav id="tableStart"></nav></table>
-        <br><ul id="feedback"></ul><br>
       </div>
+    </div>
 
-    </nav>
+    <div id="messagingSection">
+      <button id="submit-message" type="button">Send</button>
+      <input id="message" type="text">
+      <p><ul id="feedback"></ul></p>
+    </div>
 
-    <div class="accountForm">
-      
-      <h2><i><u>Your Account:</u></i></h2>
-      <p id="account-info"></p><hr><br>
+    <div id="accountSection">
+      <h2><u>Your Account:</u></h2>
+      <p id="account-info"><hr></p>
+
+      <button id="submit-logout">Logout</button><br><br>
 
       <div id="collapse-user"style="background-color: #3b4efc9a;"><b>[+/-]</b> Change your User Name <b>[+/-]</b></div>
       <span class="collapse" id="update-username">
         <br>
         <input required class="passUserInputs" id="username" type="text" placeholder="New Username"/>
-        <button id="submit-username" type="button">Change Username</button>
+        <button id="submit-username">Change Username</button>
       </span>
-      <span id="userlog"></span>
+      <p id="userlog"></p>
 
-      <br>
-
-      <div id="collapse-pass" style="background-color: #fc3b3b9a;"><b>[+/-]</b> Change your Password <b>[+/-]</b></div>
+      <div id="collapse-pass" style="background-color: #fc3b3b9a;"><b>[+/-]</b> Change your Password &nbsp;&nbsp;<b>[+/-]</b></div>
       <span class="collapse" id="update-password">
         <br>
         <input required class="passUserInputs" id="current-password" type="password" placeholder="Current Password"/>
         <input required class="passUserInputs" id="new-password" type="password" placeholder="New Password"/>
         <input required class="passUserInputs" id="confirm-new-password" type="password" placeholder="Confirm New Password"/>
-        <button id="submit-password" type="button">Change Password</button>
+        <button id="submit-password">Change Password</button>
       </span>
-      <span id="passlog"></span>
       
+      <p id="passlog"></p>
+
+      <button id="prompt" class="prompt-delete-account">Close Account</button>
+      <span class="collapse" id="close-account">
+        <p><b>Warning:</b> This is a <u>full</u> and <u>permanent</u> <u>deletion</u>, and the username will become available for all to use.<br/><i>Are you sure you want to close your account?</i></p>
+        <button id="submit-delete">CONFIRM</button>
+        <button class="prompt-delete-account">Cancel</button>
+      </span>
     </div>
 
     <!-- Scripting -->

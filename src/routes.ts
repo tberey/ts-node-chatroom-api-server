@@ -1,26 +1,31 @@
-// Server Sockets Handling (Connections and Signals) Exported Function. Imported into index.ts.
-
-// Global Space
-var exportUsername:String;
-var exportID:Number;
-
-// Export stored signed-in Username and ID.
-export {exportUsername, exportID};
+// Server Routes Handling (Request from clients) Exported Function. Imported into index.ts.
 
 // Exported as anonymous function, and handles all server traffic routing/requests.
 export default (app:Function, db:Object, bcrypt:Object) => {
 
-    // GET request, to render and serve the client login/register page.
+    // GET request route, to render and serve the client login/register page.
     app.get('/', (req:Object,res:Object) => req.session.loggedin ? res.status(307).redirect('/chat') : res.status(200).render('login'));
 
-    // GET, to render and serve client index (chatroom) client page, if logged-in, otherwise redirects to root (and serves client login page).
+    // GET request, to render and serve client index (chatroom) client page, if logged-in, otherwise redirects to root (and serves client login page).
     app.get('/chat', (req:Object,res:Object) => req.session.loggedin ? res.status(200).render('index') : res.status(403).redirect('/'));
 
-    // Client GET request for logged-in account information, to be displayed on the client's chatroom page, in the account section.
-    app.get('/accountInfo', (req:Object, res:Object) => req.session.loggedin ? res.status(200).send({id: exportID, username: exportUsername}) : res.status(403).redirect('/'));
+    // GET request for logged-in account information, to be displayed on the client's chatroom page, in the account section.
+    app.get('/accountInfo', (req:Object, res:Object) => req.session.loggedin ? res.status(200).send({id: req.session.uid, username: req.session.username}) : res.status(403).redirect('/'));
 
     // Catch any unresolved url requests to no-man's land, and direct to correct page.
     app.get('*', (req:Object, res:Object) => req.session.loggedin ? res.status(404).redirect('/chat') : res.status(404).redirect('/'));
+
+    // POST request, for the client to log-out, so clears private session data, sets logged-in to false, and redirects client. If already logged out simply redirects.
+    app.post('/logout', (req:Object, res:Object) => {
+        
+        if (req.session.loggedin) {
+            // If logged-in, clear session data and redirect client.
+            req.session.loggedin = false;
+            req.session.username = '';
+            req.session.uid = 0;
+            return res.status(200).send('/');
+        } else return res.status(200).send('/'); // Redirection only.
+    });
 
     // POST Method for the request made to login, with the details supplied by user queried against the sql db.
     app.post('/login', function(req:Object, res:Object) {
@@ -45,8 +50,8 @@ export default (app:Function, db:Object, bcrypt:Object) => {
                         if (item) {
                             // After successful password unhashing/decrypting indicating a correct username password pair, set request session data to be stored.
                             req.session.loggedin = true;
-                            req.session.username, exportUsername = username;
-                            req.session.id, exportID = results[0].id;
+                            req.session.username = username;
+                            req.session.uid = results[0].id;
 
                             res.status(200).send(`/chat`); // Successful request and so send back successful status, with redirection to chatroom.
                         
@@ -106,15 +111,15 @@ export default (app:Function, db:Object, bcrypt:Object) => {
                 
                 if (!(results.length)) {
                     //If no results returned by query (so chosen username is unique to db), then edit the record contrained by current username, to the new username.
-                    query = `UPDATE users SET username='${newUsername}' WHERE username='${exportUsername}';`;
+                    query = `UPDATE users SET username='${newUsername}' WHERE username='${req.session.username}';`;
                     db.query(query, (err:Object) => {
 
                         if (err) return res.status(500).send(err); // Error handling. Return error and bad status.
 
-                        req.session.username, exportUsername = newUsername; // Update all username data instances with new username.
+                        req.session.username = newUsername; // Update all username data instances with new username.
 
                         // Successful request and so send back successful status, with server message.
-                        res.status(201).send({serverMsg: `Successfully updated username to '${newUsername}'. Please also now login using this new username.`, id: exportID});
+                        res.status(201).send({serverMsg: `Successfully updated username to '${newUsername}'. Please also now login using this new username.`, id: req.session.uid});
                     });
                 } else res.status(409).send(`Username already exists. Please try another.`); // Unsuccessful request, as query found username, so return status and message.
             });
@@ -130,7 +135,7 @@ export default (app:Function, db:Object, bcrypt:Object) => {
         
         if (newPassword && currentPassword) {
             // If both passwords are supplied by client request, define our db sql script to pass it in as an argument with the db query function call.
-            var query = `SELECT password FROM users WHERE username = '${exportUsername}'`;
+            var query = `SELECT password FROM users WHERE username = '${req.session.username}'`;
             db.query(query, (err:Object, results:Array<Object>) => {
                 
                 if (err) return res.status(500).send(err); // Error handling. Return error and bad status.
@@ -143,7 +148,7 @@ export default (app:Function, db:Object, bcrypt:Object) => {
                         bcrypt.hash(newPassword, 10, (err:String, hash:String) => {
                             
                             // Define sql script to update current db hashed password with the new hashed password. Pass into query function call, to add to execute action.
-                            query = `UPDATE users SET password='${hash}' WHERE username='${exportUsername}';`;
+                            query = `UPDATE users SET password='${hash}' WHERE username='${req.session.username}';`;
                             db.query(query, (err:Object) => {
 
                                 if (err) return res.status(500).send(err); // Error handling. Return error and bad status.
