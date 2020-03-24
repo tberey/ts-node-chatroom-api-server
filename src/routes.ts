@@ -17,12 +17,11 @@ export default (app:Function, db:Object, bcrypt:Object) => {
 
     // POST request, for the client to log-out, so clears private session data, sets logged-in to false, and redirects client. If already logged out simply redirects.
     app.post('/logout', (req:Object, res:Object) => {
-        
         if (req.session.loggedin) {
             // If logged-in, clear session data and redirect client.
             req.session.loggedin = false;
-            req.session.username = '';
-            req.session.uid = 0;
+            req.session.username = null;
+            req.session.uid = null;
             return res.status(200).send('/');
         } else return res.status(200).send('/'); // Redirection only.
     });
@@ -71,8 +70,8 @@ export default (app:Function, db:Object, bcrypt:Object) => {
         // Capture username and password, supplied with request body from client.
         let username: String = req.body.username;
         let password: String = req.body.password;
-
-        if (username && password) {
+        if (username.length > 30) res.status(422).send(`Username is too long (Max: 30 Characters). Enter a new username.`); // Unsuccessful request, as username was too long.
+        else if (username && password) {
             // If both username and password are supplied by the client request, define our db sql script to pass in as an argument with the db query function call.
             const query = `SELECT * FROM users WHERE username = '${username}'`; // Query db for specific username.
             db.query(query, (err:Object, results:Array<Object>) => {
@@ -97,12 +96,13 @@ export default (app:Function, db:Object, bcrypt:Object) => {
         } else res.status(422).send(`Please enter both a Username and Password.`); // Unsuccessful request, as both a username and password were not found in request body.
     });
 
-    // POST Method for request made to change current username, with the new username supplied by input, and ammend in the sql db.
-    app.post('/changeUsername', (req:Object, res:Object) => {
+    // PUT Method for request made to change current username, with the new username supplied by input, and ammend in the sql db.
+    app.put('/changeUsername', (req:Object, res:Object) => {
         
         let newUsername: String = req.body.usernameUpdate; // Capture the new username requested change.
-        
-        if (newUsername) {
+
+        if (newUsername.length > 30) res.status(422).send(`Username is too long (Max: 30 Characters). Enter a new username.`); // Unsuccessful request, as username was too long.
+        else if (newUsername) {
             // If a username is supplied by the client request, define our db sql script to pass it in as an argument with the db query function call.
             var query = `SELECT * FROM users WHERE username = '${newUsername}'`; // Query db for specific username.
             db.query(query, (err:Object, results:Array<Object>) => {
@@ -126,8 +126,8 @@ export default (app:Function, db:Object, bcrypt:Object) => {
         } else res.status(422).send(`Please enter a new username.`); // Unsuccessful request, as a username was not found in request body.
     });
 
-    // POST Method for request made to change current password, with the new password supplied by input, and ammend in the sql db.
-    app.post('/changePassword', (req:Object, res:Object) => {
+    // PUT Method for request made to change current password, with the new password supplied by input, and ammend in the sql db.
+    app.put('/changePassword', (req:Object, res:Object) => {
         
          // Capture both the current and new password, included with request body.
         let newPassword: String = req.body.newPassword;
@@ -161,5 +161,24 @@ export default (app:Function, db:Object, bcrypt:Object) => {
                 });
             });
         } else res.status(422).send(`Please enter both your current and new password.`); // Unsuccessful request, as both password were not found in request body.
+    });
+
+    // DELETE Method for request to close and delete user's currently logged-in account, by dropping row from sql db, logging them out/clearing session data and redirecting client.
+    app.delete('/delete', (req:Object, res:Object) => {
+
+        if (req.session.loggedin) {
+            // If user is logged in, proceed with delete query of said user, upon db.
+            const query = `DELETE FROM users WHERE username='${req.session.username}';`;
+            db.query(query, (err:Object) => {
+
+                if (err) return res.status(500).send(err); // Error handling. Return error and bad status.
+                
+                // Clear session data and redirect client.
+                req.session.loggedin = false;
+                req.session.username = null;
+                req.session.uid = null;
+                return res.status(200).send('/');
+            });
+        } else return res.status(404).send('/'); // Redirect client.
     });
 };

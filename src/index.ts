@@ -4,11 +4,10 @@ NOTES/TODO/BUGS/FIXES:-
 
 ==================================================================================================
 
-1) Add delete account button to my account section of chatroom.
-2) Add profile pic upload option? Shows in account section, as well as a smaller version in the chat.
-3) Forgot username/password options. (So add emails to db? or method of recovery by id).
-4) If emails added to db, send notifications about signing up/forgot details etc.
-5) Prevent multiple logging into the same account.
+1) Add profile pic upload option? Shows in account section, as well as a smaller version in the chat.
+2) Forgot username/password options. (Add emails, for recovery, to db? or a method of recovery by id?).
+3) If emails added to db, send notifications about signing up/forgot details etc.
+4) Prevent multiple logging into the same account.
 
 -------------------------------------------------------------------------------------------------
 */

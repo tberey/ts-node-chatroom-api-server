@@ -4,8 +4,8 @@ $(() => {
 
     //Set extrapolate port from window href, setup Socket.io connection to server/api url, and then request all messages that may already exist.
     var port = (window.location.href).replace(/\D/g,''); // Regex to remove all but integers.
-    const socket = io.connect(`http://localhost:${port}`, {'path': '/chat'});
-    socket.emit('allMessages');
+    const socket = io.connect(`http://localhost:${port}`, {'path': '/chat'}); // Set connection URI (+set path).
+    socket.emit('allMessages'); // Get existing messages.
 
     // Declare DOM variables.
     let chatroom = $('#chatroom'); // Display data element.
@@ -33,6 +33,7 @@ $(() => {
 
     let promptDelAccount = $('.prompt-delete-account'); // Button.
     let closeAccSec = $('#close-account'); // Input form Section.
+    let deleteAccount = $('#submit-delete'); // Button.
 
     let submitlogout =$('#submit-logout'); // Button.
 
@@ -50,9 +51,15 @@ $(() => {
     collapseUserSec.click(() => (updateUserSec.css('display') == 'block') ? updateUserSec.css('display','none') : updateUserSec.css('display','block'));
 
     // Listen for a click on the Close Account button, in the Account section of the client page chatroom.
-    promptDelAccount.click(() => (closeAccSec.css('display') == 'block') ? closeAccSec.css('display','none') : closeAccSec.css('display','block'));
+    promptDelAccount.click(() => {
+        if (closeAccSec.css('display') == 'block') closeAccSec.css('display','none')
+        else {
+            closeAccSec.css('display','block');
+            $('#accountSection').scrollTop($('#accountSection').prop('scrollHeight'));
+        }
+    });
 
-    // Listen for a click on the logout button, to logout the user and redirect the client to login.
+    // Listen for a click on the logout button, to logout the user and redirect the client to login/register.
     submitlogout.click(() => {
         // POST Request, to log the client out and redirect.
         $.ajax({
@@ -65,14 +72,14 @@ $(() => {
         });
     });
 
-    // Listen for change password button click, in order to update a user's password, by POST request.
+    // Listen for change password button click, in order to update a user's password, by PUT request.
     submitPassword.click(() => {
         // Check new passwords entered both match, for user human-error protection, before chaging password request is made.
         if (confNewPass.val() === newPass.val()) {
-            // POST Request, to change exisitng username and ammend it to the new value in the sql database.
+            // PUT Request, to change exisitng username and ammend it to the new value in the sql database.
             $.ajax({
                 url:'changePassword',
-                method:'POST',
+                method:'PUT',
                 // Data to be sent in request body.
                 data: {
                         currentPassword: currentPass.val(),
@@ -87,11 +94,13 @@ $(() => {
                 error:(err) => {
                     // On unsuccessful request, display returned server message and time it out.
                     passwordLog.html(err.responseText);
+                    $('#accountSection').scrollTop($('#accountSection').prop('scrollHeight'));
                     setTimeout(() => passwordLog.html(''), 8000);
                 }
             });
         } else {
-            passwordLog.html('The new passwords you entered do not match each other. Please try again.')
+            passwordLog.html('The new passwords you entered do not match each other. Please try again.');
+            $('#accountSection').scrollTop($('#accountSection').prop('scrollHeight'));
             setTimeout(() => passwordLog.html(''), 10000);
         }
         // Clear input fields, after capturing data.
@@ -100,12 +109,12 @@ $(() => {
         confNewPass.val('');
     });
 
-    // Listen for change username button click, in order to update a user's username, by POST request.
+    // Listen for change username button click, in order to update a user's username, by PUT request.
     submitUsername.click(() => {
-        // POST Request, to change exisitng username and ammend it to the new value in the sql database.
+        // PUT Request, to change exisitng username and ammend it to the new value in the sql database.
         $.ajax({
             url:'changeUsername',
-            method:'POST',
+            method:'PUT',
             // Data to be sent in request body.
             data: {usernameUpdate: username.val()},
             success:(response) => {
@@ -120,8 +129,26 @@ $(() => {
             error:(err) => {
                 // On unsuccessful request, display returned server message, and time it out.
                 usernameLog.html(`${err.responseText}<br>`);
+                $('#accountSection').scrollTop($('#accountSection').prop('scrollHeight'));
                 username.val(''); // Clear input field.
                 setTimeout(() => usernameLog.html(''), 8000);
+            }
+        });
+    });
+
+    // Listen for a click on the Close Account button, in the Account section of the client page chatroom.
+    deleteAccount.click(() => {
+        // DELETE Request, to log the client out, delete their account and redirect to login/register.
+        $.ajax({
+            url:'delete',
+            method:'DELETE',
+            success:(response) => {
+                socket.emit('disconnect');
+                window.location.pathname = response;
+            },
+            error: (response) => {
+                socket.emit('disconnect');
+                window.location.pathname = response;
             }
         });
     });

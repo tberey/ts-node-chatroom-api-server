@@ -1,9 +1,20 @@
 /* Client Page Styling */
+body {
+    margin: 2px;
+    background-color: rgba(237, 215, 245, 0.658);
+}
 
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-  }
+}
+
+h1 {
+    font-family: 'Pacifico', serif;
+    margin-bottom: -0.1em;
+    margin-top: -0.1em;
+    text-align: center;
+}
 
 td {
     border: 2px solid #dddddd;
@@ -23,21 +34,19 @@ tr:nth-child(even) {
     display: none;
 }
 
-.break {
-    flex-basis: 100%;
-    height: 0;
-  }
-
 .passUserInputs {
     width: 90%;
-    margin-bottom: 1px;
+    margin-bottom: 2px;
 }
 
-#flex {
+.flex {
     display: flex;
-    height: 60vh;
-    width: 99vw;
-    margin-bottom: 4px;
+    width: 98vw;
+    margin-bottom: 3px;
+}
+
+#flex1 {
+    height: 54vh;
     min-height: 230px;
     font-family: 'Comfortaa', serif;
 }
@@ -46,8 +55,8 @@ tr:nth-child(even) {
     flex: 1;
     background-color:rgb(106, 215, 223) ;
     border: 3px solid rgb(19, 0, 128);
-    overflow: scroll;
-    min-width: 160px;
+    overflow: visible;
+    min-width: 155px;
 }
 
 #outputForm {
@@ -55,26 +64,24 @@ tr:nth-child(even) {
     background-color:rgb(101, 245, 214);
     border: 3px solid rgb(19, 0, 128);
     margin-right: 3px;
+    overflow: visible;
 }
 
 #messagingSection {
-    
+    flex: 1;
     padding: 2px;
-    margin-bottom: 4px;
     background-color:rgba(30, 160, 106, 0.801) ;
     border: 3px solid rgb(1, 44, 16);
     overflow: visible;
-    height: fit-content;
 }
 
 #message {
-    display: relative;
-    width: 80%;
+    width: 75%;
 }
 
 #accountSection {
-    width: 306px;
-    height: 270px;
+    width: 305px;
+    height: 275px;
     background-color:rgb(255, 200, 175) ;
     border: 3px solid rgb(128, 26, 0);
     overflow-y: scroll;
@@ -117,4 +124,12 @@ tr:nth-child(even) {
     position: relative;
     left: 29%;
     font-size: small;
+}
+
+#collapse-user {
+    background-color: #3b4efc9a;
+}
+
+#collapse-pass {
+    background-color: #fc3b3b9a;;
 }

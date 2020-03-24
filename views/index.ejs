@@ -15,13 +15,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Caveat">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Marcellus+SC">
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
 
   <!-- Main Document Body. -->
   <body>
-    <div id="flex">
+    <h1 id="h1-title">ChatRoom 1.0</h1>
+
+    <div class="flex" id="flex1">
       <div id="outputForm">
         <section id="chatroom"></section>
       </div>
@@ -32,10 +35,12 @@
       </div>
     </div>
 
+    <div class="flex" id="flex2">
     <div id="messagingSection">
       <button id="submit-message" type="button">Send</button>
       <input id="message" type="text">
       <p><ul id="feedback"></ul></p>
+    </div>
     </div>
 
     <div id="accountSection">
@@ -44,7 +49,7 @@
 
       <button id="submit-logout">Logout</button><br><br>
 
-      <div id="collapse-user"style="background-color: #3b4efc9a;"><b>[+/-]</b> Change your User Name <b>[+/-]</b></div>
+      <div id="collapse-user"><b>[+/-]</b> Change your User Name <b>[+/-]</b></div>
       <span class="collapse" id="update-username">
         <br>
         <input required class="passUserInputs" id="username" type="text" placeholder="New Username"/>
@@ -52,7 +57,7 @@
       </span>
       <p id="userlog"></p>
 
-      <div id="collapse-pass" style="background-color: #fc3b3b9a;"><b>[+/-]</b> Change your Password &nbsp;&nbsp;<b>[+/-]</b></div>
+      <div id="collapse-pass"><b>[+/-]</b> Change your Password &nbsp;&nbsp;<b>[+/-]</b></div>
       <span class="collapse" id="update-password">
         <br>
         <input required class="passUserInputs" id="current-password" type="password" placeholder="Current Password"/>
@@ -70,6 +75,8 @@
         <button class="prompt-delete-account">Cancel</button>
       </span>
     </div>
+
+    
 
     <!-- Scripting -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
