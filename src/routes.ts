@@ -15,24 +15,13 @@ export default (app:Function, db:Object, bcrypt:Object) => {
     // Catch any unresolved url requests to no-man's land, and direct to correct page.
     app.get('*', (req:Object, res:Object) => req.session.loggedin ? res.status(404).redirect('/chat') : res.status(404).redirect('/'));
 
-    // POST request, for the client to log-out, so clears private session data, sets logged-in to false, and redirects client. If already logged out simply redirects.
-    app.post('/logout', (req:Object, res:Object) => {
-        if (req.session.loggedin) {
-            // If logged-in, clear session data and redirect client.
-            req.session.loggedin = false;
-            req.session.username = null;
-            req.session.uid = null;
-            return res.status(200).send('/');
-        } else return res.status(200).send('/'); // Redirection only.
-    });
-
     // POST Method for the request made to login, with the details supplied by user queried against the sql db.
     app.post('/login', function(req:Object, res:Object) {
-        
+
         // Capture username and password, supplied with request body from client.
         let username: String = req.body.username;
         let password: String = req.body.password;
-
+        
         if (username && password) {
             // If both username and password are supplied by the client request, define our db sql script to pass in as an argument with the db query function call.
             const query = `SELECT * FROM users WHERE username = '${username}'`; // Query db for specific username.
@@ -96,9 +85,25 @@ export default (app:Function, db:Object, bcrypt:Object) => {
         } else res.status(422).send(`Please enter both a Username and Password.`); // Unsuccessful request, as both a username and password were not found in request body.
     });
 
+    // POST request, for the client to log-out, so clears private session data, sets logged-in to false, and redirects client. If already logged out simply redirects.
+    app.post('/logout', (req:Object, res:Object) => {
+
+        if (!(req.session.loggedin)) return; // Error handling: do not carry out request (and break out of function), if user is not logged in.
+        
+        if (req.session.loggedin) {
+            // If logged-in, clear session data and redirect client.
+            req.session.loggedin = false;
+            req.session.username = null;
+            req.session.uid = null;
+            return res.status(200).send('/');
+        } else return res.status(200).send('/'); // Redirection only.
+    });
+
     // PUT Method for request made to change current username, with the new username supplied by input, and ammend in the sql db.
     app.put('/changeUsername', (req:Object, res:Object) => {
         
+        if (!(req.session.loggedin)) return; // Error handling: do not carry out request (and break out of function), if user is not logged in.
+
         let newUsername: String = req.body.usernameUpdate; // Capture the new username requested change.
 
         if (newUsername.length > 30) res.status(422).send(`Username is too long (Max: 30 Characters). Enter a new username.`); // Unsuccessful request, as username was too long.
@@ -128,6 +133,8 @@ export default (app:Function, db:Object, bcrypt:Object) => {
 
     // PUT Method for request made to change current password, with the new password supplied by input, and ammend in the sql db.
     app.put('/changePassword', (req:Object, res:Object) => {
+
+        if (!(req.session.loggedin)) return; // Error handling: do not carry out request (and break out of function), if user is not logged in.
         
          // Capture both the current and new password, included with request body.
         let newPassword: String = req.body.newPassword;
@@ -165,6 +172,8 @@ export default (app:Function, db:Object, bcrypt:Object) => {
 
     // DELETE Method for request to close and delete user's currently logged-in account, by dropping row from sql db, logging them out/clearing session data and redirecting client.
     app.delete('/delete', (req:Object, res:Object) => {
+
+        if (!(req.session.loggedin)) return; // Error handling: do not carry out request (and break out of function), if user is not logged in.
 
         if (req.session.loggedin) {
             // If user is logged in, proceed with delete query of said user, upon db.

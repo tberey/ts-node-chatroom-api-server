@@ -7,7 +7,8 @@ NOTES/TODO/BUGS/FIXES:-
 1) Add profile pic upload option? Shows in account section, as well as a smaller version in the chat.
 2) Forgot username/password options. (Add emails, for recovery, to db? or a method of recovery by id?).
 3) If emails added to db, send notifications about signing up/forgot details etc.
-4) Prevent multiple logging into the same account.
+4) Add second new password confirmation on registering (confirm pass field).
+5) Look into OAuth and JWT (JSON Web Tokens)??
 
 -------------------------------------------------------------------------------------------------
 */
@@ -34,8 +35,8 @@ const port = process.env.PORT || 8001; // Set server port.
 const db = mySQL.createConnection(privateData.dbConnection);
 const sessionMiddleware = session({
     secret: privateData.sessionSecret,
-    saveUninitialized: true,
-    resave: true
+    saveUninitialized: false,
+    resave: false
 });
 
 // Initialise a live connection to db, unless error thrown.

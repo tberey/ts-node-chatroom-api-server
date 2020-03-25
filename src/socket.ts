@@ -25,7 +25,19 @@ export default (io:Server) => {
     // Listen for all connections to server.
     io.on('connection', (socket:Socket, user:IUser, connectDateTime:Date, serverMsg:String) => {
         
-        // Create a user using imported username and id varibales, and also set connection date/time.
+        // On connection, check to see if user/socket is already connected to the server concurrently, if so effectively logging user out (clearing session data).
+        userSet.forEach((val) => {
+            if (val.name == socket.request.session.username || val.uniqueID == socket.request.session.uid) {
+                socket.request.session.loggedin = false;
+                socket.request.session.username = null;
+                socket.request.session.uid = null;
+                socket.request.session.save();
+            }
+        });
+
+        if (!(socket.request.session.loggedin)) return socket.disconnect(); // Disconnect user and break out of function, if the user is not logged-in.
+        
+        // Create a new server user, using stored request session username and id variables, and also set connection date/time.
         user = {uniqueID: socket.request.session.uid, name: socket.request.session.username};
         connectDateTime = new Date(socket.handshake.time);
 
@@ -40,7 +52,7 @@ export default (io:Server) => {
             
             io.sockets.emit('deleteList'); // Inform client to clear it's user list in preparation for the new updated list.
 
-            // Update username in the set and emit new user list to all sockets, then only after do we change username for the connected socket that requested it. Cannot emit a full set, hence loop.
+            // Update username in the set and emit new user list to all sockets, then only after do we change username for the connected socket that requested it. Cannot emit a full set, hence iterate through each item.
             userSet.forEach((val) => {
                 if (val.name == user.name) val.name = data.username;
                 io.sockets.emit('userListItem', val);
