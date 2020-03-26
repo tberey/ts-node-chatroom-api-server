@@ -58,11 +58,12 @@
         <form>
             <h3>Login/Register</h3>
             <div class="container" style="background-color:#00ff557a">
-                <input type="text" placeholder="Enter Username" name="username" id="uname" required>
-                <input type="password" placeholder="Enter Password" name="password" id="pword" required><br>
+                <input type="text" placeholder="Enter your Username to Login or Register" name="username" id="uname" required>
+                <input type="password" placeholder="Enter your Password to Login or Register" name="password" id="pword" required><br>
                 <button type="button" id="submit-login">Login</button>
             </div>
             <div class="container" style="background-color:#00ffc831">
+                <input type="password" placeholder="Confirm your Password to Register" name="confPassword" id="conf-pword"><br>
                 <button type="button" id="submit-register">Register</button>
             </div>
         </form>
@@ -75,6 +76,7 @@
             //Global Space
             let username = $('#uname');
             let password = $('#pword');
+            let confirmPass = $('#conf-pword');
             let msg = $('#login-msg');
             
             // Font random color assignment, for login screen animations.
@@ -83,7 +85,15 @@
 
             // Listen for the register button being clicked, to create a new user in the database.
             $('#submit-register').on('click', () => {
+
+                // Error handling/catching, in that the password and password confirmation entered do not match, so clear fields, prevent register new user, and return msg.
+                if (password.val() !== confirmPass.val()) {
+                    password.val('');
+                    confirmPass.val('');
+                    return msg.html('The passwords you entered do not match. Please try again.');
+                }
                 // POST Request, to register a new user and add it to sql database, and show any resulting server messages.
+                console.log(1);
                 $.ajax({
                     url:'register',
                     method:'POST',
@@ -94,9 +104,8 @@
                     success:(response) => msg.html(response),
                     error:(err) => msg.html(err.responseText)
                 });
-                // Clear input fields after capturing their values for data sent with POST Request.
-                username.val('');
-                password.val('');
+                password.val(''); // Clear input field after capturing value for data sent with POST Request.
+                confirmPass.val(''); // Clear input field.
             });
 
             // Listen for the login button being clicked, to login and redirect.
