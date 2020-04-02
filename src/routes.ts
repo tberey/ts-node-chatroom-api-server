@@ -1,22 +1,26 @@
 // Server Routes Handling (Request from clients) Exported Function. Imported into index.ts.
 
+// Import types.
+import {Request, Response, Express} from "express";
+import {Connection} from "mysql";
+
 // Exported as anonymous function, and handles all server traffic routing/requests.
-export default (app:Function, db:Object, bcrypt:Object) => {
+export default (app: Express, db:Connection, bcrypt:any) => {
 
     // GET request route, to render and serve the client login/register page.
-    app.get('/', (req:Object,res:Object) => req.session.loggedin ? res.status(307).redirect('/chat') : res.status(200).render('login'));
+    app.get('/', (req:Request,res:Response) => req.session.loggedin ? res.status(307).redirect('/chat') : res.status(200).render('login'));
 
     // GET request, to render and serve client index (chatroom) client page, if logged-in, otherwise redirects to root (and serves client login page).
-    app.get('/chat', (req:Object,res:Object) => req.session.loggedin ? res.status(200).render('index') : res.status(403).redirect('/'));
+    app.get('/chat', (req:Request,res:Response) => req.session.loggedin ? res.status(200).render('index') : res.status(403).redirect('/'));
 
     // GET request for logged-in account information, to be displayed on the client's chatroom page, in the account section.
-    app.get('/accountInfo', (req:Object, res:Object) => req.session.loggedin ? res.status(200).send({id: req.session.uid, username: req.session.username}) : res.status(403).redirect('/'));
+    app.get('/accountInfo', (req:Request, res:Response) => req.session.loggedin ? res.status(200).send({id: req.session.uid, username: req.session.username}) : res.status(403).redirect('/'));
 
     // Catch any unresolved url requests to no-man's land, and direct to correct page.
-    app.get('*', (req:Object, res:Object) => req.session.loggedin ? res.status(404).redirect('/chat') : res.status(404).redirect('/'));
+    app.get('*', (req:Request, res:Response) => req.session.loggedin ? res.status(404).redirect('/chat') : res.status(404).redirect('/'));
 
     // POST Method for the request made to login, with the details supplied by user queried against the sql db.
-    app.post('/login', function(req:Object, res:Object) {
+    app.post('/login', function(req:Request, res:Response) {
 
         // Capture username and password, supplied with request body from client.
         let username: String = req.body.username;
@@ -25,7 +29,7 @@ export default (app:Function, db:Object, bcrypt:Object) => {
         if (username && password) {
             // If both username and password are supplied by the client request, define our db sql script to pass in as an argument with the db query function call.
             const query = `SELECT * FROM users WHERE username = '${username}'`; // Query db for specific username.
-            db.query(query, (err:Object, results: Array<Object>) => {
+            db.query(query, (err:Object, results:any /*:Array<Object>*/) => {
 
                 if (err) return res.status(500).send(err); // Error handling. Return error and bad status.
 
@@ -54,7 +58,7 @@ export default (app:Function, db:Object, bcrypt:Object) => {
 
 
     // POST Method for the request made to register, with the details supplied by user added to the sql db.
-    app.post('/register', (req:Object, res:Object) => {
+    app.post('/register', (req:Request, res:Response) => {
         
         // Capture username and password, supplied with request body from client.
         let username: String = req.body.username;
@@ -86,7 +90,7 @@ export default (app:Function, db:Object, bcrypt:Object) => {
     });
 
     // POST request, for the client to log-out, so clears private session data, sets logged-in to false, and redirects client. If already logged out simply redirects.
-    app.post('/logout', (req:Object, res:Object) => {
+    app.post('/logout', (req:Request, res:Response) => {
 
         if (!(req.session.loggedin)) return; // Error handling: do not carry out request (and break out of function), if user is not logged in.
         
@@ -100,7 +104,7 @@ export default (app:Function, db:Object, bcrypt:Object) => {
     });
 
     // PUT Method for request made to change current username, with the new username supplied by input, and ammend in the sql db.
-    app.put('/changeUsername', (req:Object, res:Object) => {
+    app.put('/changeUsername', (req:Request, res:Response) => {
         
         if (!(req.session.loggedin)) return; // Error handling: do not carry out request (and break out of function), if user is not logged in.
 
@@ -132,7 +136,7 @@ export default (app:Function, db:Object, bcrypt:Object) => {
     });
 
     // PUT Method for request made to change current password, with the new password supplied by input, and ammend in the sql db.
-    app.put('/changePassword', (req:Object, res:Object) => {
+    app.put('/changePassword', (req:Request, res:Response) => {
 
         if (!(req.session.loggedin)) return; // Error handling: do not carry out request (and break out of function), if user is not logged in.
         
@@ -143,7 +147,7 @@ export default (app:Function, db:Object, bcrypt:Object) => {
         if (newPassword && currentPassword) {
             // If both passwords are supplied by client request, define our db sql script to pass it in as an argument with the db query function call.
             var query = `SELECT password FROM users WHERE username = '${req.session.username}'`;
-            db.query(query, (err:Object, results:Array<Object>) => {
+            db.query(query, (err:Object, results:any /*:Array<Object>*/) => {
                 
                 if (err) return res.status(500).send(err); // Error handling. Return error and bad status.
                 
@@ -171,7 +175,7 @@ export default (app:Function, db:Object, bcrypt:Object) => {
     });
 
     // DELETE Method for request to close and delete user's currently logged-in account, by dropping row from sql db, logging them out/clearing session data and redirecting client.
-    app.delete('/delete', (req:Object, res:Object) => {
+    app.delete('/delete', (req:Request, res:Response) => {
 
         if (!(req.session.loggedin)) return; // Error handling: do not carry out request (and break out of function), if user is not logged in.
 

@@ -1,6 +1,6 @@
 // Server Sockets Handling (Connections and Signals) Exported Function. Imported into index.ts.
 
-// Imported Variables/Types.
+// Imported types.
 import {Server, Socket} from "socket.io";
 
 // Define and Export interfaces/types.
