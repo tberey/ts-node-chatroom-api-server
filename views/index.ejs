@@ -1,88 +1,98 @@
-<!-- Served Client Page -->
+<!-- Client served Login/Register Page. -->
 
 <!DOCTYPE html>
 <html>
+    <head>
+        <!-- Metadata -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Login/Register</title>
+        <meta name="author" content="Tom B">
+        <meta name="description" content="">
 
-  <head>
-    <!-- Metadata -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ChatRoom</title>
-    <meta name="author" content="Tom B">
-    <meta name="description" content="">
+        <!-- Styling. -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+        <link rel="stylesheet" type="text/css" href="login-styling.css">
+    </head>
 
-    <!-- Stylesheet and client dependancy CDN remote Script. -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Caveat">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Marcellus+SC">
-    <link rel="stylesheet" type="text/css" href="style.css">
-  </head>
+    <!-- Main document body. -->
+    <body>
+        <h2 style="font-family:'Pacifico';">Welcome to ChatRoom 1.0</h2>
+        <form>
+            <h3>Login/Register</h3>
+            <div class="container" style="background-color:#00ff557a">   
+                    <input type="text" placeholder="Enter your Username to Login or Register" name="username" id="uname" required>
+                    <input type="password" placeholder="Enter your Password to Login or Register" name="password" id="pword" required><br>
+                    <button type="submit" id="submit-login">Login</button> 
+            </div>
 
-  <!-- Main Document Body. -->
-  <body>
-    <h1 id="h1-title">ChatRoom 1.0</h1>
+            <div class="container" style="background-color:#00ffc831">
+                    <input type="password" placeholder="Confirm your Password to Register" name="confPassword" id="conf-pword"><br>
+                    <button type="submit" id="submit-register">Register</button>    
+            </div>
+        </form>
+        <div>
+            <p id="login-msg"></p>
+        </div>
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script>
 
-    <div class="flex" id="flex1">
-      <div id="outputForm">
-        <section id="chatroom"></section>
-      </div>
+            //Global Space
+            let username = $('#uname');
+            let password = $('#pword');
+            let confirmPass = $('#conf-pword');
+            let msg = $('#login-msg');
+            
+            // Font random color assignment, for login screen animations.
+            const randomColor = (colors = ['red','blue','green','orange','purple','black','orangered']) => {return colors[Math.floor(Math.random() * colors.length)]};
+            setInterval(() => $(document.body).css('color', randomColor()) , 2500);
 
-      <div id="usersSection">
-        <h2>Users List:</h2>
-        <table><nav id="tableStart"></nav></table>
-      </div>
-    </div>
+            // Listen for the register button being clicked, to create a new user in the database.
+            $('#submit-register').on('click', () => {
 
-    <div class="flex" id="flex2">
-    <div id="messagingSection">
-      <button id="submit-message" type="button">Send</button>
-      <input id="message" type="text">
-      <p><ul id="feedback"></ul></p>
-    </div>
-    </div>
+                // Error handling/catching, in that the password and password confirmation entered do not match, so clear fields, prevent register new user, and return msg.
+                if (password.val() !== confirmPass.val()) {
+                    password.val('');
+                    confirmPass.val('');
+                    return msg.html('The passwords you entered do not match. Please try again.');
+                }
+                // POST Request, to register a new user and add it to sql database, and show any resulting server messages.
+                console.log(1);
+                $.ajax({
+                    url:'register',
+                    method:'POST',
+                    data: {
+                        username: username.val(),
+                        password: password.val()
+                    },
+                    success:(response) => msg.html(response),
+                    error:(err) => msg.html(err.responseText)
+                });
+                password.val(''); // Clear input field after capturing value for data sent with POST Request.
+                confirmPass.val(''); // Clear input field.
+            });
 
-    <div id="accountSection">
-      <h2><u>Your Account:</u></h2>
-      <p id="account-info"><hr></p>
-
-      <button id="submit-logout">Logout</button><br><br>
-
-      <div id="collapse-user"><b>[+/-]</b> Change your User Name <b>[+/-]</b></div>
-      <span class="collapse" id="update-username">
-        <br>
-        <input required class="passUserInputs" id="username" type="text" placeholder="New Username"/>
-        <button id="submit-username">Change Username</button>
-      </span>
-      <p id="userlog"></p>
-
-      <div id="collapse-pass"><b>[+/-]</b> Change your Password &nbsp;&nbsp;<b>[+/-]</b></div>
-      <span class="collapse" id="update-password">
-        <br>
-        <input required class="passUserInputs" id="current-password" type="password" placeholder="Current Password"/>
-        <input required class="passUserInputs" id="new-password" type="password" placeholder="New Password"/>
-        <input required class="passUserInputs" id="confirm-new-password" type="password" placeholder="Confirm New Password"/>
-        <button id="submit-password">Change Password</button>
-      </span>
-      
-      <p id="passlog"></p>
-
-      <button id="prompt" class="prompt-delete-account">Close Account</button>
-      <span class="collapse" id="close-account">
-        <p><b>Warning:</b> This is a <u>full</u> and <u>permanent</u> <u>deletion</u>, and the username will become available for all to use.<br/><i>Are you sure you want to close your account?</i></p>
-        <button id="submit-delete">CONFIRM</button>
-        <button class="prompt-delete-account">Cancel</button>
-      </span>
-    </div>
-
-    
-
-    <!-- Scripting -->
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-
-    <script src="script.js"></script>
-
-  </body>
-  
+            // Listen for the login button being clicked, to login and redirect.
+            $('#submit-login').on('click', () => {
+                // POST Request, to login with an existing user and either return a resulting message, or redirect to the chatroom.
+                $.ajax({
+                    url:'login',
+                    method:'POST',
+                    data: {
+                        username: username.val(),
+                        password: password.val()
+                    },
+                    success:(response) => {
+                        msg.html(response);
+                        if (response.indexOf('/chat') > -1) window.location.pathname = response;
+                    },
+                    error:(err) => msg.html(err.responseText)
+                });
+                // Clear input fields after capturing their values for data sent with POST Request.
+                password.val('');
+                username.val('');
+            });    
+        </script>
+    </body>
 </html>
