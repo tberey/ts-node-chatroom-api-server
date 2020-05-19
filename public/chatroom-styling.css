@@ -1,15 +1,6 @@
-/* Client Page Styling */
+/* Client Styling - Chatroom Page */
 body {
-    margin: 2px;
     background-color: rgba(237, 215, 245, 0.658);
-}
-
-form {
-    border: 3px solid #0398b3;
-    text-align: center;
-    width: 100%;
-    background-color:#00ffc831;
-    font-family: 'Lobster', serif;
 }
 
 input[type=text], input[type=password] {

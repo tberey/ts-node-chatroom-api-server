@@ -37,12 +37,19 @@ export class Server {
         this.io = SocketIOServer(this.server, {'path': '/chat'}); // send to io class?
         this.db = mySQL.createConnection(privateData.dbConnection);
         this.sessionMiddleware = session({
+            //store: new FileStore(),
+            cookie: {
+                maxAge: 36000000,
+                httpOnly: false
+              },
             secret: privateData.sessionSecret,
             saveUninitialized: true,
             resave: true
         });
+
         this.serverSetup();
     }
+
 
     private serverSetup():void {
         

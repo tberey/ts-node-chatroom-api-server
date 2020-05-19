@@ -91,6 +91,12 @@ export class SocketsServer extends ServerRouter {
 
             // Listen for any sockets disconnecting, to supply informative information to be logged.
             socket.on('disconnect', () => {
+                
+                //socket.request.session.loggedin = false;
+                //socket.request.session.username = null;
+                //socket.request.session.uid = null;
+                //socket.request.session.save();
+
                 // Emit to first clear client-side user lists (and send server msg to chat), next find and delete user from set, then resend user list set to all sockets, item by item.
                 serverMsg = `'${user.name}' disconnected, bye! <i style="font-size:x-small;">[<b>ID:</b> ${user.uniqueID} - ${(new Date()).toLocaleString()}]</i>`;
                 this.io.sockets.emit('deleteList', serverMsg);

@@ -6,7 +6,13 @@ form {
     text-align: center;
     width: 100%;
     background-color:#00ffc831;
+}
+h3 {
     font-family: 'Lobster', serif;
+    text-align: center;
+}
+h2 {
+    font-family:'Pacifico';
 }
 p {
     text-align: center;
