@@ -42,3 +42,4 @@
 |Version 1.0.0 [2020-04-02]|<ul><li>1.0 Release!</li><li>Update Types in routing.</li><li>Update README.md</li></ul>|
 |Version 2.0.0 [2020-05-18]|<ul><li>TypeScript & Class Update - Whilst already a TypeScript project, it has been further updated to make more and better use of TypeScript features, as well as reconstructed into a more object oriented and class based design. Also sharpened up the code, fixing any mistakes, inconsistencies, or general improvements.</li><li>Update README.md</li></ul>|
 |Version 2.1.0 [2020-05-19]|<ul><li>EJS Update - Whilst already a EJS Templated project, it has been further updated to make more and better use of ejs engine features, as well as compacting the code, fixing any mistakes/bugs, inconsistencies, and general improvements.</li><li>Update README.md</li></ul>|
+|Version 2.1.1 [2020-05-20]|<ul><li>EJS Update - Further and general improvements.</li><li></li><li>Update README.md</li></ul>|

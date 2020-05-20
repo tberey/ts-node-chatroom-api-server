@@ -20,8 +20,6 @@ export class SocketsServer extends ServerRouter {
     }
 
     private socketHandler():void {
-        
-        //this.io.on('connection', () => console.log('A connection was made!'));
 
         // Create new Sets (ES6) to hold all chatroom messages history, and connected users list, for a session.
         const messageSet: Set<IMessage> = new Set();
@@ -65,11 +63,8 @@ export class SocketsServer extends ServerRouter {
             });
 
             // Listen for any typing signal, to signal who is typing and broadcast/send to all other sockets connected.
-            socket.on('typing', () => {
-
-                // Broadcast the typing status of user typing. (Broadcast: Send to all sockets but the origin socket which sent the signal 'typing').
-                socket.broadcast.emit('typing', user.name);
-            });
+            // Broadcast the typing status of user typing. (Broadcast: Send to all sockets but the origin socket which sent the signal 'typing').
+            socket.on('typing', () => socket.broadcast.emit('typing', user.name));
 
             // Listen for any new messages sent, build the message up, and then emit/send to all sockets connected.
             socket.on('newMessage', data => {

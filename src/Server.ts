@@ -64,8 +64,7 @@ export class Server {
 
         this.app.set('view engine', 'ejs');
         this.app.use(express.static('public'));
-
-        
+ 
         // Initialise a live connection to db, unless error thrown.
         this.db.connect((err:Error):void => {
             if (err) throw err;
@@ -73,6 +72,7 @@ export class Server {
         });
         
     }
+    
 
     public startServer():void {   
         if (this.hostname) this.server.listen(parseInt(this.port), this.hostname, () => console.log(`Server started on http://${this.hostname}:${this.port}`));
