@@ -1,78 +1,75 @@
 <!-- Client Served Chatroom Page -->
 
 <%- include('partials/header') %>
-<!-- Styling. -->
-<link rel="stylesheet" type="text/css" href="chatroom-styling.css">
-</head>
-    <!-- Main Document Body. -->
-    <body>
-        <h1 id="h1-title">Chat2.1</h1>
-        <div class="flex" id="flex1">
-            <div id="outputForm">
-                <section id="chatroom"></section>
-            </div>
+<!-- Main Document Body. -->
+<h1 id="h1-title">Chat2.1</h1>
+<div class="flex" id="flex1">
+    <div id="outputForm">
+        <section id="chatroom"></section>
+    </div>
 
-            <div id="usersSection">
-                <h2>Users List:</h2>
-                <table><nav id="tableStart"></nav></table>
-            </div>
-        </div>
+    <div id="usersSection">
+        <h2>Users List:</h2>
+        <table><nav id="tableStart"></nav></table>
+    </div>
+</div>
 
-        <div class="flex" id="flex2">
-            <div id="messagingSection">
-                <button id="submit-message" type="button">Send</button>
-                <input id="message" type="text">
-                <p><ul id="feedback"></ul></p>
-            </div>
-        </div>
+<div class="flex" id="flex2">
+    <div id="messagingSection">
+        <button id="submit-message" type="button">Send</button>
+        <input id="message" type="text">
+        <p><ul id="feedback"></ul></p>
+    </div>
+</div>
 
-        <div id="accountSection">
-            <h2><u>Your Account:</u></h2>
-            <p id="account-info">Username: <b><%= data.username %></b> | ID: <b><%= data.uid %></b><hr></p>
+<div id="accountSection">
+    <h2><u>Your Account:</u></h2>
+    <p id="account-info">Username: <b><%= data.username %></b> | ID: <b><%= data.uid %></b><hr></p>
 
-            <form action="/logout" method="POST">
-            <button type="submit" id="submit-logout">Logout</button><br><br>
-            </form>
+    <form action="/logout" method="POST">
+    <button type="submit" id="submit-logout">Logout</button><br><br>
+    </form>
 
-            <div id="collapse-user"
-                onClick="(document.getElementById('update-username').style.display == 'block') ? document.getElementById('update-username').style.display = 'none' : document.getElementById('update-username').style.display = 'block';
-                document.getElementById('update-username').scrollIntoView();"
-            >
-                <b>[+/-]</b> Change your Username <b>[+/-]</b>
-            </div>
-            <form class="collapse" id="update-username" action="/changeUsername" method="POST">
-                <br>
-                <input required class="passUserInputs" id="username" type="text" name="newUsername" placeholder="New Username"/>
-                <button type="submit" id="submit-username">Change Username</button><br>
-            </form>
+    <div id="collapse-user"
+        onClick="(document.getElementById('update-username').style.display == 'block') ? document.getElementById('update-username').style.display = 'none' : document.getElementById('update-username').style.display = 'block';
+        document.getElementById('update-username').scrollIntoView();"
+    >
+        <b>[+/-]</b> Change your Username &nbsp; <b>[+/-]</b>
+    </div>
+    <form class="collapse" id="update-username" action="/changeUsername" method="POST">
+        <br>
+        <input required class="passUserInputs" id="username" type="text" name="newUsername" placeholder="New Username"/>
+        <button type="submit" id="submit-username">Change Username</button><br>
+    </form>
 
-            <div id="collapse-pass"
-                onClick="(document.getElementById('update-password').style.display == 'block') ? document.getElementById('update-password').style.display = 'none' : document.getElementById('update-password').style.display = 'block';
-                document.getElementById('update-password').scrollIntoView();"
-            >
-                <b>[+/-]</b> Change your Password &nbsp;&nbsp;<b>[+/-]</b>
-            </div>
-            <span class="collapse" id="update-password">
-            <br>
-            <input required class="passUserInputs" id="current-password" type="password" placeholder="Current Password"/>
-            <input required class="passUserInputs" id="new-password" type="password" placeholder="New Password"/>
-            <input required class="passUserInputs" id="confirm-new-password" type="password" placeholder="Confirm New Password"/>
-            <button id="submit-password">Change Password</button>
-            </span>
-            <p id="msglog"><%= data.msg %></p>
+    <div id="collapse-pass"
+        onClick="(document.getElementById('update-password').style.display == 'block') ? document.getElementById('update-password').style.display = 'none' : document.getElementById('update-password').style.display = 'block';
+        document.getElementById('update-password').scrollIntoView();"
+    >
+        <b>[+/-]</b> Change your Password &nbsp;&nbsp;<b>[+/-]</b>
+    </div>
+    <span class="collapse" id="update-password">
+        <br>
+        <input required class="passUserInputs" id="current-password" type="password" placeholder="Current Password"/>
+        <input required class="passUserInputs" id="new-password" type="password" placeholder="New Password"/>
+        <input required class="passUserInputs" id="confirm-new-password" type="password" placeholder="Confirm New Password"/>
+        <button id="submit-password">Change Password</button>
+    </span>
 
-            <button id="prompt" class="prompt-delete-account"
-                onclick="(document.getElementById('close-account').style.display == 'block') ? document.getElementById('close-account').style.display = 'none' : document.getElementById('close-account').style.display = 'block';
-                document.getElementById('close-account').scrollIntoView();"
-            >
-                Close Account
-            </button>
-            <span class="collapse" id="close-account">
-            <p><b>Warning:</b> This is a <u>full</u> and <u>permanent</u> <u>deletion</u>, and the username will become available for all to use.<br/><i>Are you sure you want to close your account?</i></p>
-            <button id="submit-delete">CONFIRM</button>
-            <button class="prompt-delete-account" onClick="document.getElementById('close-account').style.display = 'none';">Cancel</button>
-            </span>
-        </div>
-        <input name="url" id="url" type="hidden" value="<%= `http://localhost:${data.port}`; %>"/>
-        <%- include('partials/chatScript') %>  
-    <%- include('partials/footer') %>  
+    <p id="msglog"><%= data.msg %></p>
+
+    <button id="prompt" class="prompt-delete-account"
+        onclick="(document.getElementById('close-account').style.display == 'block') ? document.getElementById('close-account').style.display = 'none' : document.getElementById('close-account').style.display = 'block';
+        document.getElementById('close-account').scrollIntoView();"
+    >
+        Close Account
+    </button>
+    <span class="collapse" id="close-account">
+        <p><b>Warning:</b> This is a <u>full</u> and <u>permanent</u> <u>deletion</u>, and the username will become available for all to use.<br/><i>Are you sure you want to close your account?</i></p>
+        <button id="submit-delete">CONFIRM</button>
+        <button class="prompt-delete-account" onClick="document.getElementById('close-account').style.display = 'none';">Cancel</button>
+    </span>
+</div>
+<input name="url" id="url" type="hidden" value="<%= `http://localhost:${data.port}`; %>"/>
+<%- include('partials/chatScript') %>  
+<%- include('partials/footer') %>  

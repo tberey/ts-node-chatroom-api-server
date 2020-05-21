@@ -1,27 +1,25 @@
 <!-- Client served Login/Register Page. -->
 
 <%- include('partials/header') %>
-<!-- Styling. -->
-<link rel="stylesheet" type="text/css" href="login-styling.css">
-</head>
 <!-- Main Document Body. -->
-<body><h2>Welcome to Chat2.1</h2>
-    <h3>Login/Register</h3>
-    <form class="container" style="background-color:#00ff557a" action="/login" method="POST">   
-            <input type="text" placeholder="Enter your Username to Login..." name="username" id="uname" required>
-            <input type="password" placeholder="Enter your Password to Login..." name="password" id="pword" required><br>
-            <button type="submit" id="submit-login">Login</button> 
-    </form><br>
-    <form class="container" style="background-color:#00ffc831" action="/register" method="POST">
-        <input type="text" placeholder="Enter your Username to Register..." name="username" id="reg-uname" required>
-        <input type="password" placeholder="Enter your Password to Register..." name="password" id="reg-pword" required>
-        <input type="password" placeholder="Confirm your new Password to Register..." name="confPassword" id="conf-pword" required><br>
-        <button type="submit" id="submit-register">Register</button>    
-    </form>
-    <div><p id="login-msg"><b><%= msg %></b></p><br></div>
-    <!-- Scripting -->
-    <script>
-        const randomColor = (colors = ['red','blue','green','orange','purple','black','orangered']) => {return colors[Math.ceil(Math.random() * colors.length-1)]};
-        setInterval(() => $(document.body).css('color', randomColor()) , 2000);
-    </script>
+<h2 class="loginh2">Welcome to Chat2.1</h2>
+<h3 class="loginh3">Login/Register</h3>
+<form class="container loginForm" action="/login" method="POST">   
+        <input class="loginInput" type="text" placeholder="Enter your Username to Login..." name="username" id="uname" required>
+        <input class="loginInput" type="password" placeholder="Enter your Password to Login..." name="password" id="pword" required><br>
+        <button class="loginButton" type="submit" id="submit-login">Login</button> 
+</form><br><br>
+<form class="container registerForm" action="/register" method="POST">
+    <input class="loginInput" type="text" placeholder="Enter your Username to Register..." name="username" id="reg-uname" required>
+    <input class="loginInput" type="password" placeholder="Enter your Password to Register..." name="password" id="reg-pword" required>
+    <input class="loginInput" type="password" placeholder="Confirm your new Password to Register..." name="confPassword" id="conf-pword" required><br>
+    <button class="loginButton" type="submit" id="submit-register">Register</button>    
+</form>
+<div><p class="centerP" id="login-msg"><b><%= msg %></b></p><br></div>
+
+<!-- Scripting -->
+<script>
+    const randomColor = (colors = ['red','blue','green','orange','purple','black','orangered']) => {return colors[Math.ceil(Math.random() * colors.length-1)]};
+    setInterval(() => $(document.body).css('color', randomColor()) , 2000);
+</script>
 <%- include('partials/footer') %> 

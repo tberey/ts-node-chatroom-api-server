@@ -1,15 +1,9 @@
 /* Client Styling - Chatroom Page */
-body {
-    background-color: rgba(237, 215, 245, 0.658);
-}
-
-input[type=text], input[type=password] {
-    width: 60%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1.5px solid rgb(21, 75, 0);
-    box-sizing: border-box;
+html {
+    background-color: rgb(237, 215, 245);
+    margin: 0;
+    height: 100%;
+    width: 99.9%; 
 }
 
 table {
@@ -19,15 +13,13 @@ table {
 
 h1 {
     font-family: 'Pacifico', serif;
-    margin-bottom: -0.1em;
-    margin-top: -0.1em;
     text-align: center;
 }
 
 td {
     border: 2px solid #dddddd;
     text-align: center;
-    padding: 6px;
+    padding: 5px;
 }
 
 tr:nth-child(odd) {
@@ -38,17 +30,70 @@ tr:nth-child(even) {
     background-color: #0213615d;
 }
 
-.collapse {
-    display: none;
+button:hover {
+    opacity: 0.6;
+}
+
+.loginInput {
+    width: 60%;
+    padding: 12px 16px;
+    margin: 8px;
+    display: inline-block;
+    border: 1.5px solid rgb(21, 75, 0);
+    box-sizing: border-box;
+}
+
+.loginButton {
+    color: white;
+    padding: 12px 16px;
+    margin: 8px;
+    border: none;
+    cursor: pointer;
+    width: 60%;
+    max-width: 500px;
+    display: inline-block;
+}
+
+.loginForm {
+    border: 3px solid #126d00;
+    text-align: center;
+    width: 99.9%;
+    background-color:#00ff557a
+}
+
+.registerForm {
+    border: 3px solid #0398b3;
+    text-align: center;
+    width: 99.9%;
+    background-color:#00ffc831;
+}
+
+.loginh2 {
+    font-family:'Pacifico';
+}
+
+.loginh3 {
+    font-family: 'Lobster', serif;
+    text-align: center;
 }
 
 .centerP {
     text-align: center;
 }
 
+.collapse {
+    display: none;
+}
+
 .passUserInputs {
     width: 90%;
     margin-bottom: 2px;
+}
+
+.flex {
+    display: flex;
+    width: 98vw;
+    margin-bottom: 3px;
 }
 
 #submit-register {
@@ -57,20 +102,6 @@ tr:nth-child(even) {
 
 #submit-login {
     background-color: rgb(1, 107, 4);
-}
-
-button:hover {
-    opacity: 0.7;
-}
-
-.container {
-    padding: 16px;
-}
-
-.flex {
-    display: flex;
-    width: 98vw;
-    margin-bottom: 3px;
 }
 
 #flex1 {
