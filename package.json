@@ -1,11 +1,11 @@
 {
-  "name": "ts-node-sql-chat-api2",
+  "name": "ts-node-chat-room-api-server",
   "version": "2.0.0",
   "description": "A locally hosted server, for users to connect to the api, then proceed to login and chat to other users.",
-  "homepage": "https://github.com/tberey/ts-node-js-sql-chat-api#readme",
+  "homepage": "https://github.com/tberey/ts-node-chat-room-api-server#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tberey/ts-node-js-sql-chat-api.git"
+    "url": "https://github.com/tberey/ts-node-chat-room-api-server.git"
   },
   "main": "build/index.js",
   "scripts": {

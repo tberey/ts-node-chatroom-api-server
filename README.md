@@ -1,28 +1,19 @@
-# User Authenticated Chat Room Browser App: (TypeScript + Node.js + SQL)
+# Chat App with User Authentication & Accounts
 
+## A locally hosted http REST API, made in Typescript and Node, with Express and Socket.IO frameworks, supported by a MySQL database. Uses EJS template engine for client-side page rendering & serving.
 
-***
-
-
-## A locally hosted http REST API, made in Typescript and Node, with Express and Socket.IO frameworks, supported by a MySQL database.
-
-### <i> Login/Register and join the chatroom, presented in real-time and dynamically. Manage your account, such as changing password or username (which are both needed to login!). Account information is all queried/edited/stored via a MySQL database.
+### Login/Register and join the chatroom, which presented in real-time and dynamically for all concurrently connected users. Manage your account, such as changing password or username (which are both needed to login or register). Account information is all queried/edited/stored via a MySQL database.
 
 <br>
 
 ***
 
-### Client Page (Front-End) Homepage: <br>
+###### Client Page (Front-End) Homepage: <br>
 #### <b>http://localhost:<Port\>/</b>
 
 ***
 
-<br>
-
-***
-***
-
-<br>
+<br><i>
 
 |Version| Changes|
 |:---|:---|
@@ -44,3 +35,4 @@
 |Version 2.1.0 [2020-05-19]|<ul><li>EJS Update - Whilst already a EJS Templated project, it has been further updated to make more and better use of ejs engine features, as well as compacting the code, fixing any mistakes/bugs, inconsistencies, and general improvements.</li><li>Update README.md</li></ul>|
 |Version 2.1.1 [2020-05-20]|<ul><li>EJS Update - Further and general improvements.</li><li>Client-side Scripting restructure & tidy-up.</li><li>Update README.md</li></ul>|
 |Version 2.2.0 [2020-05-20]|<ul><li>Final EJS Update & Cleanup</li><li>Further client-side Scripting restructure & tidy-up.</li><li>CSS stylesheets consolidation (2=>1).</li><li>Comments rewriting and tidy.</li><li>Final checkovers and tidy up + Testing.</li><li>Update README.md</li></ul>|
+|Version 2.2.0 [2020-05-20]|<ul><li>Renaming and descriptions editing.</li><li>Update README.md</li></ul>|
